@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.SplitMenuButton?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane fx:id="graphics" prefHeight="531.0" prefWidth="650.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.demo.HelloApplication">
+    <children>
+        <Label fx:id="titleLbl" layoutX="251.0" layoutY="48.0" text="GRAPHICS">
+            <font>
+                <Font size="18.0" />
+            </font>
+        </Label>
+        <Button fx:id="memBtn" layoutX="231.0" layoutY="131.0" mnemonicParsing="false" onAction="#memPie" text="Show memory in pie" />
+        <SplitMenuButton fx:id="graphicsMenu" layoutX="263.0" layoutY="192.0" mnemonicParsing="false" text="Select">
+            <items>
+                <MenuItem fx:id="Dspace" mnemonicParsing="false" onAction="#DiskSpace" text="Disk Space" />
+                <MenuItem mnemonicParsing="false" text="Action 2" />
+            </items>
+        </SplitMenuButton>
+    </children>
+</AnchorPane>
