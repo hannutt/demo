@@ -119,7 +119,7 @@ public class HelloApplication extends Application {
     }
 
     public long setDiskSpace(long newSpace) {
-        this.total = (int) newSpace;
+        this.total =  newSpace;
         return this.total;
     }
 

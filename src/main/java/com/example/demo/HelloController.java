@@ -20,6 +20,7 @@ import java.util.Scanner;
 
 public class HelloController {
     HelloApplication n = new HelloApplication();
+    OpenApps openApp = new OpenApps();
     public TextField osField;
     //tuodaan fxml tiedostosta
     @FXML
@@ -42,6 +43,14 @@ public class HelloController {
 
     @FXML
     public MenuButton pids;
+    @FXML
+    public Button noteBtn;
+
+    @FXML public MenuItem openNote,openChrome,openPaint;
+
+
+
+
 
 
 
@@ -52,7 +61,20 @@ public class HelloController {
     //INITIALIZE METODI SUORITETAAN HETI OHJELMAN KÄYNNISTYESSÄ TÄSSÄ TAPAUKSESSA
     //SE KUTSUU SHOWUSER METODIA, JOKA TOTEUTETAAN HETI.
     public void initialize() {
+        //openApp on OpenApps luokan olio ja tässä olion avulla käytetäänn
+        //openapps luokan metodia.
+        openNote.setOnAction(e->{
+            openApp.OpenNote();
+        });
+        openChrome.setOnAction((e->{
+            openApp.OpenChrome();
+        }));
+        openPaint.setOnAction((e->{
+            openApp.OpenPaint();
+        }));
         showUser();
+
+
 
     }
     @FXML
@@ -60,7 +82,8 @@ public class HelloController {
 
         // käyttöjärjestelmän nimi ja version asetetaan txtBox id-nimellä
         //nimettyyn kenttään
-        txtBox.setText("Operating System: " +System.getProperty("os.name")+ " version: " +System.getProperty("os.version")+" Architecture: "+System.getProperty("os.arch"));
+        txtBox.setText("Operating System: " +System.getProperty("os.name")+ " version: " +System.getProperty("os.version")+" Architecture: "+System.getProperty("os.arch")+"\n"
+                +"Windows " + System.getProperty("sun.arch.data.model")+" bit");
 
     }
     @FXML
@@ -154,12 +177,13 @@ public class HelloController {
 
         /* For each filesystem root, print some info */
         for (File root : roots) {
-            n.setDiskSpace(root.getTotalSpace()/(1024*1024*1024));
+
 
 
 
             txtBox.setText("File system root: " + root.getAbsolutePath()+ "\n "+"Total Disk space (Gb): " +root.getTotalSpace()/(1024*1024*1024)+"\n" +
-                    ""+ "free disk space: "+root.getUsableSpace()/(1024*1024*1024)+"\n"+"current directory: "+curDir+" "+ System.getenv("PROGRAM_FILES"));
+                    ""+ "free disk space: "+root.getUsableSpace()/(1024*1024*1024)+"\n"
+                    + "current directory: "+curDir+" "+ System.getenv("PROGRAM_FILES"));
 
 
         }
