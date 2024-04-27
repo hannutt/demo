@@ -9,6 +9,7 @@
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.effect.DropShadow?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.VBox?>
@@ -18,31 +19,44 @@
     <padding>
         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
     </padding>
-    <Label style="-fx-font-size: 22;" text="SYSTEM INFO">
+    <Label style="-fx-font-size: 24;" text="SYSTEM INFO" textFill="#fffefe">
         <font>
             <Font size="14.0" />
         </font></Label>
-   <MenuBar fx:id="menubar">
+   <MenuBar fx:id="menubar" maxHeight="30.0" maxWidth="564.0" prefHeight="30.0" prefWidth="564.0" style="-fx-background-color: #a1cfbf; -fx-font-size: 14;">
      <menus>
-       <Menu fx:id="open" mnemonicParsing="false" text="Open">
+       <Menu fx:id="open" mnemonicParsing="false" text="Quick open">
          <items>
            <MenuItem fx:id="openNote" mnemonicParsing="false" text="Notepad" />
                <MenuItem fx:id="openChrome" mnemonicParsing="false" text="Def. webbrowser" />
                <MenuItem fx:id="openPaint" mnemonicParsing="false" text="Paint" />
          </items>
        </Menu>
-       <Menu mnemonicParsing="false" text="Edit">
+       <Menu fx:id="Fc" mnemonicParsing="false" text="Select the app. to open">
          <items>
-           <MenuItem mnemonicParsing="false" text="Delete" />
+           <MenuItem mnemonicParsing="false" onAction="#startFc" text="Explore" />
          </items>
        </Menu>
-       <Menu mnemonicParsing="false" text="Help">
+       <Menu mnemonicParsing="false" text="Show text in textbox">
          <items>
-           <MenuItem mnemonicParsing="false" text="About" />
+           <MenuItem mnemonicParsing="false" onAction="#FcTxtFile" text="Select txt-file" />
          </items>
        </Menu>
+         <Menu mnemonicParsing="false" text="Select file to open">
+            <items>
+               <MenuItem mnemonicParsing="false" onAction="#OpenFile" text="Open" />
+            </items>
+         </Menu>
      </menus>
+      <effect>
+         <DropShadow />
+      </effect>
    </MenuBar>
+    <Label fx:id="user" prefHeight="22.0" prefWidth="264.0" textFill="WHITE">
+        <font>
+            <Font name="HP Simplified Light" size="18.0" />
+        </font></Label>
+    <Button fx:id="graphBtn" mnemonicParsing="false" onAction="#openGraph" text="Graphics" />
     <MenuButton fx:id="select" mnemonicParsing="false" text="Select">
         <items>
             <MenuItem id="OsInfo" mnemonicParsing="false" onAction="#showOs" text="Os" />
@@ -53,11 +67,6 @@
             <MenuItem fx:id="running" mnemonicParsing="false" onAction="#showRunningApps" text="Running Apps" />
         </items>
     </MenuButton>
-    <Label fx:id="user" prefHeight="22.0" prefWidth="264.0" textFill="WHITE">
-        <font>
-            <Font name="HP Simplified Light" size="18.0" />
-        </font></Label>
-    <Button fx:id="graphBtn" mnemonicParsing="false" onAction="#openGraph" text="Graphics" />
    <ImageView fx:id="tools" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
       <image>
          <Image url="@../../../../../../../../../../Users/Omistaja/Desktop/tools.jpg" />
@@ -65,8 +74,8 @@
    </ImageView>
    <Button fx:id="closeBtn" mnemonicParsing="false" onAction="#closeTask" text="Close" visible="false" />
 
-   <TextField fx:id="pidTxt" visible="false" />
-    <TextArea fx:id="txtBox" prefHeight="154.0" prefWidth="200.0" style="-fx-background-color: blue; -fx-border-radius: 50; -fx-border-w: 15;">
+   <TextField fx:id="pidTxt" maxWidth="150.0" visible="false" />
+    <TextArea fx:id="txtBox" maxHeight="170.0" maxWidth="350.0" prefHeight="154.0" prefWidth="200.0" style="-fx-background-color: blue; -fx-border-radius: 50; -fx-border-w: 15;">
         <font>
             <Font name="Courier New" size="14.0" />
         </font></TextArea>

@@ -22,6 +22,7 @@ QUICK OPENER
 You can open common windows applications with one click from the drop down menu.
 Quick Opener uses the Java ProcessBuilder class to launch applications, except for the browser, which is launched using
 the java.awt.desktop class.
+You can also open the desired program or file. These features are made with Java File Chooser and Runtime classes.
 
 GRAPHICS
 With the Graphics option, you can draw graphical pie charts of your ram memory and hard disk space.

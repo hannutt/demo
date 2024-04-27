@@ -2,12 +2,22 @@ package com.example.demo;
 
 import javafx.scene.control.TextInputDialog;
 
-import java.io.FileNotFoundException;
+import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 
 public class OpenApps {
+
+// metodilla avataan file chooserilla valittu tiedosto valittu tiedosto on parametrina.
+    public void OpenSelected(File app) {
+        ProcessBuilder pb = new ProcessBuilder(String.valueOf(app));
+        try {
+            pb.start();
+        }
+        catch (Exception e) {
+        }
+    }
     public void OpenNote() {
         ProcessBuilder pb = new ProcessBuilder("Notepad.exe");
         try {

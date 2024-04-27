@@ -7,6 +7,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import java.io.BufferedReader;
@@ -21,6 +22,8 @@ import java.util.Scanner;
 public class HelloController {
     HelloApplication n = new HelloApplication();
     OpenApps openApp = new OpenApps();
+
+    OpenFiles openFile = new OpenFiles();
     public TextField osField;
     //tuodaan fxml tiedostosta
     @FXML
@@ -82,7 +85,7 @@ public class HelloController {
 
         // käyttöjärjestelmän nimi ja version asetetaan txtBox id-nimellä
         //nimettyyn kenttään
-        txtBox.setText("Operating System: " +System.getProperty("os.name")+ " version: " +System.getProperty("os.version")+" Architecture: "+System.getProperty("os.arch")+"\n"
+        txtBox.setText("Operating System: " +System.getProperty("os.name")+"\n" +"version: " +System.getProperty("os.version")+" Architecture: "+System.getProperty("os.arch")+"\n"
                 +"Windows " + System.getProperty("sun.arch.data.model")+" bit");
 
     }
@@ -257,5 +260,47 @@ public class HelloController {
             System.out.println("not found");
         }
 
+    }
+
+    public void startFc(ActionEvent actionEvent) {
+        Stage stage = new Stage();
+        FileChooser fc = new FileChooser();
+        File app = fc.showOpenDialog(stage);
+        if (app != null) {
+            //valitun tiedoston polku eli sijainti
+            System.out.println(app.getAbsolutePath());
+            //käytetään OpenApps luoka openselected metodia valitun
+            //sovelluksen avaamiseen. file eli valittu tiedoston annetaan metodille
+            //parametrina kts. myös luokasta käyttö
+            openApp.OpenSelected(app);
+
+        }
+
+    }
+
+    public void FcTxtFile(ActionEvent actionEvent) throws IOException {
+        Stage stage = new Stage();
+        FileChooser fc = new FileChooser();
+        File file = fc.showOpenDialog(stage);
+        if (file != null) {
+            //valitun tiedoston polku eli sijainti
+            System.out.println(file.getAbsolutePath());
+
+            openFile.openAndShowTextbox(file);
+            txtBox.setText(openFile.getTxtContent());
+
+        }
+    }
+
+
+    public void OpenFile(ActionEvent actionEvent) throws IOException {
+        Stage stage = new Stage();
+        FileChooser fc = new FileChooser();
+        File fileName = fc.showOpenDialog(stage);
+        if (fileName != null)
+        {
+            //metodi avaa valitun tiedoston sopivalla ohjelmalla
+            openFile.OpenSelectedFile(fileName);
+        }
     }
 }
