@@ -2,6 +2,7 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
@@ -15,7 +16,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox fx:id="userNam" alignment="CENTER" prefHeight="553.0" prefWidth="597.0" spacing="20.0" style="-fx-background-color: #5b7d78;" stylesheets="@../../../../../styles.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.demo.HelloController">
+<VBox fx:id="mainV" alignment="CENTER" prefHeight="800.0" prefWidth="725.0" spacing="20.0" style="-fx-background-color: #5b7d78;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.demo.HelloController">
     <padding>
         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
     </padding>
@@ -37,11 +38,6 @@
            <MenuItem mnemonicParsing="false" onAction="#startFc" text="Explore" />
          </items>
        </Menu>
-       <Menu mnemonicParsing="false" text="Show text in textbox">
-         <items>
-           <MenuItem mnemonicParsing="false" onAction="#FcTxtFile" text="Select txt-file" />
-         </items>
-       </Menu>
          <Menu mnemonicParsing="false" text="Select file to open">
             <items>
                <MenuItem mnemonicParsing="false" onAction="#OpenFile" text="Open" />
@@ -56,7 +52,6 @@
         <font>
             <Font name="HP Simplified Light" size="18.0" />
         </font></Label>
-    <Button fx:id="graphBtn" mnemonicParsing="false" onAction="#openGraph" text="Graphics" />
     <MenuButton fx:id="select" mnemonicParsing="false" text="Select">
         <items>
             <MenuItem id="OsInfo" mnemonicParsing="false" onAction="#showOs" text="Os" />
@@ -65,9 +60,20 @@
             <MenuItem mnemonicParsing="false" onAction="#filesystem" text="Filesystem" />
             <MenuItem mnemonicParsing="false" onAction="#processor" text="Processor" />
             <MenuItem fx:id="running" mnemonicParsing="false" onAction="#showRunningApps" text="Running Apps" />
+         <MenuItem fx:id="network" mnemonicParsing="false" onAction="#NetWork" text="Network" />
+         <MenuItem fx:id="registry" mnemonicParsing="false" onAction="#winReg" text="Registry" />
         </items>
     </MenuButton>
-   <ImageView fx:id="tools" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+    <Button fx:id="graphBtn" mnemonicParsing="false" onAction="#openGraph" text="Graphics" />
+   <TextField fx:id="dirInput" maxWidth="200.0" />
+   <Button fx:id="dirBtn" mnemonicParsing="false" onAction="#excecuteDIr" text="Dir" />
+   <MenuButton mnemonicParsing="false" text="MenuButton">
+     <items>
+       <MenuItem mnemonicParsing="false" text="Action 1" />
+       <MenuItem mnemonicParsing="false" text="Action 2" />
+     </items>
+   </MenuButton>
+   <ImageView fx:id="tools" fitHeight="150.0" fitWidth="166.0" pickOnBounds="true" preserveRatio="true">
       <image>
          <Image url="@../../../../../../../../../../Users/Omistaja/Desktop/tools.jpg" />
       </image>
@@ -75,9 +81,11 @@
    <Button fx:id="closeBtn" mnemonicParsing="false" onAction="#closeTask" text="Close" visible="false" />
 
    <TextField fx:id="pidTxt" maxWidth="150.0" visible="false" />
-    <TextArea fx:id="txtBox" maxHeight="170.0" maxWidth="350.0" prefHeight="154.0" prefWidth="200.0" style="-fx-background-color: blue; -fx-border-radius: 50; -fx-border-w: 15;">
+    <TextArea fx:id="txtBox" maxHeight="170.0" maxWidth="472.0" minHeight="-Infinity" prefHeight="132.0" prefWidth="472.0" style="-fx-background-color: blue; -fx-border-radius: 50; -fx-border-w: 15;">
         <font>
             <Font name="Courier New" size="14.0" />
         </font></TextArea>
+   <Button fx:id="urlBtn" mnemonicParsing="false" onAction="#checkUrl" text="Check" visible="false" />
+   <CheckBox fx:id="pingUrl" mnemonicParsing="false" text="Ping url" visible="false" />
 
 </VBox>

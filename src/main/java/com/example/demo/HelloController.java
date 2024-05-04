@@ -15,9 +15,15 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.lang.management.ManagementFactory;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+
+import java.net.InetAddress;
+import java.net.*;
+import java.io.*;
+import java.util.*;
 
 public class HelloController {
     HelloApplication n = new HelloApplication();
@@ -40,9 +46,17 @@ public class HelloController {
 
     @FXML
     public TextField pidTxt;
+    @FXML
+    public TextField urlField;
+
+    @FXML
+    public CheckBox pingUrl;
 
     @FXML
     public Button closeBtn;
+
+    @FXML
+    public  Button urlBtn;
 
     @FXML
     public MenuButton pids;
@@ -50,6 +64,9 @@ public class HelloController {
     public Button noteBtn;
 
     @FXML public MenuItem openNote,openChrome,openPaint;
+
+    @FXML
+    public TextField dirInput;
 
 
 
@@ -95,6 +112,8 @@ public class HelloController {
         //aina näkymättöksi.
         pidTxt.setVisible(false);
         closeBtn.setVisible(false);
+        urlField.setVisible(false);
+        urlBtn.setVisible(false);
         java.lang.String javav = System.getProperty("java.version");
 
         //Installation directory for Java Runtime Environment (JRE)
@@ -115,6 +134,8 @@ public class HelloController {
     protected void showMemory() {
         pidTxt.setVisible(false);
         closeBtn.setVisible(false);
+        urlField.setVisible(false);
+        urlBtn.setVisible(false);
 
 
 
@@ -136,6 +157,8 @@ public class HelloController {
     public void processor() throws IOException {
         pidTxt.setVisible(false);
         closeBtn.setVisible(false);
+        urlField.setVisible(false);
+        urlBtn.setVisible(false);
         double cpuLoad = ((OperatingSystemMXBean) ManagementFactory.getOperatingSystemMXBean()).getProcessCpuLoad();
 
         //prosessorin id
@@ -241,6 +264,8 @@ public class HelloController {
             //metodin suorituksen myötä tekstikenttä tulee näkyviin
             pidTxt.setVisible(true);
             closeBtn.setVisible(true);
+            urlField.setVisible(false);
+            urlBtn.setVisible(false);
 
 
         }).start();
@@ -302,5 +327,95 @@ public class HelloController {
             //metodi avaa valitun tiedoston sopivalla ohjelmalla
             openFile.OpenSelectedFile(fileName);
         }
+    }
+
+
+    public void NetWork(ActionEvent actionEvent) throws IOException, InterruptedException {
+        urlBtn.setVisible(true);
+        pidTxt.setVisible(true);
+        pingUrl.setVisible(true);
+        String con="";
+        Process process = java.lang.Runtime.getRuntime().exec("ping www.google.com");
+        int status = process.waitFor();
+        if (status ==0)
+        {
+            con = "Online";
+
+        }
+        else {
+            con = "Offline";
+        }
+        txtBox.setText("IP-address: "+InetAddress.getLocalHost().getHostAddress()+"\n"+
+                "Hostname: "+InetAddress.getLocalHost().getHostName()+"\n"+"Internet connection: "+con
+                );
+    }
+
+    public void checkUrl(ActionEvent actionEvent) throws IOException, InterruptedException {
+        if (pingUrl.isSelected()) {
+            String urlStr = pidTxt.getText();
+            Process process = java.lang.Runtime.getRuntime().exec("ping "+urlStr);
+            int status = process.waitFor();
+            if (status == 0)
+            {
+                txtBox.setText("AVAILABLE");
+            }
+
+        }
+        else {
+            String urlStr = pidTxt.getText();
+            URL url = new URL(urlStr);
+            txtBox.setText(urlStr+ " protocol: "+url.getProtocol());
+
+        }
+
+    }
+
+
+    public void winReg(ActionEvent actionEvent) throws IOException {
+        Process process =  Runtime.getRuntime().exec("cmd reg query /?" );
+        BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+        System.out.println(reader);
+        String line;
+        while ((line = reader.readLine()) != null) {
+            System.out.println(line);
+            txtBox.appendText(line+"\n");
+        }
+        reader.close();
+
+
+
+    }
+
+    //haetaan kansio kovalelyltä ja tulostetaan sisältö txtboksissa.
+    public void excecuteDIr(ActionEvent actionEvent) throws IOException {
+        String path = dirInput.getText();
+        String cmdArr[] = {"cmd","/c","dir",path};
+        Process p = Runtime.getRuntime().exec(cmdArr);
+        //Jos järjestelmäkomento tuottaa jonkin tuloksen, meidän on kaapattava tulos luomalla BufferedReader,
+        // joka kääri prosessista palautetun InputStreamin eli tulostetaan tulos luettavassa mudossa.
+        BufferedReader reader = new BufferedReader(new InputStreamReader(p.getInputStream()));
+        String line;
+        String fileType;
+
+        //tiedostotyypin selvitys
+
+        int files = 0;
+        while ((line = reader.readLine()) != null) {
+            File fName = new File(line);
+            if (line.contains(".txt"))
+            {
+                files=files+1;
+                //NÄYTETÄÄN VAIN TXT PÄÄTTEISET TIEDOSTOT
+                //txtBox.appendText(line+"\n");
+
+            }
+
+
+            txtBox.appendText(line+"\n");
+        }
+        System.out.println("total: "+files);
+
+
+        reader.close();
     }
 }

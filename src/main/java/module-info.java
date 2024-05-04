@@ -12,6 +12,8 @@ module com.example.demo {
     requires jdk.management;
     requires java.desktop;
     requires javafx.swing;
+    requires java.prefs;
+    requires org.apache.commons.io;
 
     opens com.example.demo to javafx.fxml;
     exports com.example.demo;

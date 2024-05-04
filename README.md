@@ -5,6 +5,7 @@ MAIN FEATURES:
 
 Graphical user interface made with Gluon's Scene Builder. UI contains a dropdown menu, where you can select an option.
 Options are:
+
 windows user -> The logged-in Windows user is automatically displayed when the program is run.
 
 These are executed when you select them:
@@ -17,6 +18,15 @@ File system -> shows the total status of the hard disk and the free space.
 Running applications-> shows running applications and their process ID.
 when you select the running apps option, a hidden text field and button will appear. 
 With these you can shut down the running process by entering the process id number in the text field and clicking the close button.
+
+Network -> shows your IP address, hostname and checks your Internet connection status by pinging an external web page.
+the network feature also has a hidden text field and button that appear when the feature is selected.
+You can ping any web page and the program will tell you if the page is available or not.
+
+DIR FEATURE 
+Displays a list of files and subdirectories in a directory.
+The list appears in the program's text area component.
+This is done with cmd commands and Java Runtime & BufferReader classes.
 
 QUICK OPENER
 You can open common windows applications with one click from the drop down menu.

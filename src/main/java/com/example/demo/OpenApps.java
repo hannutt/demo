@@ -9,7 +9,7 @@ import java.net.URISyntaxException;
 
 public class OpenApps {
 
-// metodilla avataan file chooserilla valittu tiedosto valittu tiedosto on parametrina.
+// metodilla avataan file chooserilla valittu ohjelmatiedosto. valittu tiedosto on parametrina (app).
     public void OpenSelected(File app) {
         ProcessBuilder pb = new ProcessBuilder(String.valueOf(app));
         try {
@@ -28,6 +28,7 @@ public class OpenApps {
     }
 
     public void OpenChrome() {
+
         //ikkuna ja syötekenttä
         TextInputDialog td = new TextInputDialog();
         td.setHeaderText(" Enter URL: ");
@@ -35,12 +36,21 @@ public class OpenApps {
         //syötekentän tekstin tallennus muuttujaan.
         String address = td.getEditor().getText();
         try {
-            java.awt.Desktop.getDesktop().browse(new URI(address));
+            //jos syötekenttä on tyhjä avataan selain google.comiin
+            if (address.isEmpty())
+            {
+                java.awt.Desktop.getDesktop().browse(new URI("https://www.google.com"));
+
+            }
+            else {
+                java.awt.Desktop.getDesktop().browse(new URI(address));
+            }
         } catch (IOException e) {
             throw new RuntimeException(e);
         } catch (URISyntaxException e) {
             throw new RuntimeException(e);
         }
+
 
 
     }
