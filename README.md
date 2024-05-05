@@ -14,6 +14,7 @@ Memory -> shows information about your device's RAM memory.
 Processor -> shows information about your device's processor.
 Java -> shows your Java version and installation directory.
 File system -> shows the total status of the hard disk and the free space.
+Registry -> access to the Windows registry.
 
 Running applications-> shows running applications and their process ID.
 when you select the running apps option, a hidden text field and button will appear. 
@@ -23,10 +24,11 @@ Network -> shows your IP address, hostname and checks your Internet connection s
 the network feature also has a hidden text field and button that appear when the feature is selected.
 You can ping any web page and the program will tell you if the page is available or not.
 
-DIR FEATURE 
-Displays a list of files and subdirectories in a directory.
+DIR FEATURE
+Displays a list of files and hidden files and subdirectories of directories in the user-entered path.
 The list appears in the program's text area component.
 This is done with cmd commands and Java Runtime & BufferReader classes.
+You can also list files by file extension by using ready-made options or by entering your own file extension.
 
 QUICK OPENER
 You can open common windows applications with one click from the drop down menu.

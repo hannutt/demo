@@ -7,6 +7,9 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.GridPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
@@ -15,25 +18,27 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.lang.management.ManagementFactory;
-import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
 import java.net.InetAddress;
 import java.net.*;
-import java.io.*;
-import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 public class HelloController {
     HelloApplication n = new HelloApplication();
     OpenApps openApp = new OpenApps();
 
+    Dir dir = new Dir();
+
     OpenFiles openFile = new OpenFiles();
+
+
     public TextField osField;
     //tuodaan fxml tiedostosta
     @FXML
-    public Label user;
+    public Label user,title;
 
     @FXML
     public TextArea txtBox;
@@ -66,7 +71,25 @@ public class HelloController {
     @FXML public MenuItem openNote,openChrome,openPaint;
 
     @FXML
-    public TextField dirInput;
+    public TextField dirInput,extField;
+
+    @FXML
+    public GridPane functionsGP;
+
+    @FXML
+    public CheckBox hiddenFiles;
+
+    public  String HDserial;
+    public String setSerial(String p)
+    {
+        this.HDserial = p;
+        return this.HDserial;
+
+    }
+
+    public String getSerial() {
+        return this.HDserial;
+    }
 
 
 
@@ -81,6 +104,7 @@ public class HelloController {
     //INITIALIZE METODI SUORITETAAN HETI OHJELMAN KÄYNNISTYESSÄ TÄSSÄ TAPAUKSESSA
     //SE KUTSUU SHOWUSER METODIA, JOKA TOTEUTETAAN HETI.
     public void initialize() {
+
         //openApp on OpenApps luokan olio ja tässä olion avulla käytetäänn
         //openapps luokan metodia.
         openNote.setOnAction(e->{
@@ -112,7 +136,7 @@ public class HelloController {
         //aina näkymättöksi.
         pidTxt.setVisible(false);
         closeBtn.setVisible(false);
-        urlField.setVisible(false);
+
         urlBtn.setVisible(false);
         java.lang.String javav = System.getProperty("java.version");
 
@@ -134,7 +158,7 @@ public class HelloController {
     protected void showMemory() {
         pidTxt.setVisible(false);
         closeBtn.setVisible(false);
-        urlField.setVisible(false);
+
         urlBtn.setVisible(false);
 
 
@@ -157,7 +181,6 @@ public class HelloController {
     public void processor() throws IOException {
         pidTxt.setVisible(false);
         closeBtn.setVisible(false);
-        urlField.setVisible(false);
         urlBtn.setVisible(false);
         double cpuLoad = ((OperatingSystemMXBean) ManagementFactory.getOperatingSystemMXBean()).getProcessCpuLoad();
 
@@ -195,7 +218,17 @@ public class HelloController {
         user.setText("Cur. Windows username: " +userName);
     }
 
-    public void filesystem() {
+    public void filesystem() throws IOException {
+        Process p = Runtime.getRuntime().exec("cmd.exe /c vol c: " );
+        BufferedReader reader = new BufferedReader(new InputStreamReader(p.getInputStream()));
+
+        String line;
+        while ((line = reader.readLine()) != null) {
+            System.out.println(line);
+            setSerial(line.replace("Volume Serial Number is",""));
+
+        }
+        reader.close();
         java.lang.String curDir = System.getProperty("user.dir");
         File[] roots = File.listRoots();
 
@@ -207,8 +240,8 @@ public class HelloController {
 
 
 
-            txtBox.setText("File system root: " + root.getAbsolutePath()+ "\n "+"Total Disk space (Gb): " +root.getTotalSpace()/(1024*1024*1024)+"\n" +
-                    ""+ "free disk space: "+root.getUsableSpace()/(1024*1024*1024)+"\n"
+            txtBox.setText("Hard drive serial number: "+getSerial()+  "\nFile system root: " + root.getAbsolutePath()+ "\n "+"Total Disk space (Gb): " +root.getTotalSpace()/(1024*1024*1024)+"\n" +
+                    ""+ "free disk space (GB): "+root.getUsableSpace()/(1024*1024*1024)+"\n"
                     + "current directory: "+curDir+" "+ System.getenv("PROGRAM_FILES"));
 
 
@@ -387,35 +420,199 @@ public class HelloController {
     }
 
     //haetaan kansio kovalelyltä ja tulostetaan sisältö txtboksissa.
-    public void excecuteDIr(ActionEvent actionEvent) throws IOException {
-        String path = dirInput.getText();
-        String cmdArr[] = {"cmd","/c","dir",path};
-        Process p = Runtime.getRuntime().exec(cmdArr);
-        //Jos järjestelmäkomento tuottaa jonkin tuloksen, meidän on kaapattava tulos luomalla BufferedReader,
-        // joka kääri prosessista palautetun InputStreamin eli tulostetaan tulos luettavassa mudossa.
-        BufferedReader reader = new BufferedReader(new InputStreamReader(p.getInputStream()));
-        String line;
-        String fileType;
+    public void excecuteDIr(ActionEvent actionEvent) throws IOException, InterruptedException {
 
-        //tiedostotyypin selvitys
+        if (dirInput.getText().isEmpty()) {
+            //textfieldin taustaväri muutos punaiseksi jos se on tyhjä.
+            dirInput.setStyle("-fx-background-color: red;");
+            TimeUnit.SECONDS.sleep(3);
+            dirInput.setStyle("-fx-background-color: white;");
 
-        int files = 0;
-        while ((line = reader.readLine()) != null) {
-            File fName = new File(line);
-            if (line.contains(".txt"))
-            {
-                files=files+1;
-                //NÄYTETÄÄN VAIN TXT PÄÄTTEISET TIEDOSTOT
-                //txtBox.appendText(line+"\n");
+        }
+        else if (hiddenFiles.isSelected())
+        {
+            String path = dirInput.getText();
+            String cmdArr[] = {"cmd", "/c", "dir/a:h", path};
+            Process p = Runtime.getRuntime().exec(cmdArr);
+            //Jos järjestelmäkomento tuottaa jonkin tuloksen, meidän on kaapattava tulos luomalla BufferedReader,
+            // joka kääri prosessista palautetun InputStreamin eli tulostetaan tulos luettavassa mudossa.
+            BufferedReader reader = new BufferedReader(new InputStreamReader(p.getInputStream()));
+            String line;
+            String fileType;
+
+            //tiedostotyypin selvitys
+
+
+            while ((line = reader.readLine()) != null) {
+                File fName = new File(line);
+                if (line.contains(".txt")) {
+
+                    //NÄYTETÄÄN VAIN TXT PÄÄTTEISET TIEDOSTOT
+                    //txtBox.appendText(line+"\n");
+
+                }
+
+
+                txtBox.appendText(line + "\n");
+            }
+
+
+
+            reader.close();
+        }
+
+
+        else {
+
+
+            String path = dirInput.getText();
+            String cmdArr[] = {"cmd", "/c", "dir", path};
+            Process p = Runtime.getRuntime().exec(cmdArr);
+            //Jos järjestelmäkomento tuottaa jonkin tuloksen, meidän on kaapattava tulos luomalla BufferedReader,
+            // joka kääri prosessista palautetun InputStreamin eli tulostetaan tulos luettavassa mudossa.
+            BufferedReader reader = new BufferedReader(new InputStreamReader(p.getInputStream()));
+            String line;
+            String fileType;
+
+            //tiedostotyypin selvitys
+
+
+            while ((line = reader.readLine()) != null) {
+                File fName = new File(line);
+                if (line.contains(".txt")) {
+
+                    //NÄYTETÄÄN VAIN TXT PÄÄTTEISET TIEDOSTOT
+                    //txtBox.appendText(line+"\n");
+
+                }
+
+
+                txtBox.appendText(line + "\n");
+            }
+
+
+
+            reader.close();
+        }
+
+
+
+    }
+
+
+
+    public void txtFileSrc(ActionEvent actionEvent) throws IOException, InterruptedException {
+        if (dirInput.getText().isEmpty())
+        {
+            //textfieldin taustaväri muutos punaiseksi.
+            dirInput.setStyle("-fx-background-color: red;");
+
+
+        }
+        else {
+            String path = dirInput.getText();
+
+            String cmdArr[] = {"cmd","/c","dir",path};
+            Process p = Runtime.getRuntime().exec(cmdArr);
+            //Jos järjestelmäkomento tuottaa jonkin tuloksen, meidän on kaapattava tulos luomalla BufferedReader,
+            // joka kääri prosessista palautetun InputStreamin eli tulostetaan tulos luettavassa mudossa.
+            BufferedReader reader = new BufferedReader(new InputStreamReader(p.getInputStream()));
+            String line;
+            String fileType;
+
+            //tiedostotyypin selvitys
+
+
+            while ((line = reader.readLine()) != null) {
+                File fName = new File(line);
+                if (line.contains(".txt"))
+                {
+
+                    //NÄYTETÄÄN VAIN TXT PÄÄTTEISET TIEDOSTOT
+                    txtBox.appendText(line+"\n");
+
+                }
+
+
 
             }
 
 
-            txtBox.appendText(line+"\n");
+
+            reader.close();
+
+
         }
-        System.out.println("total: "+files);
 
 
-        reader.close();
+
+    }
+
+
+    public void srcOwnExt(ActionEvent actionEvent) {
+
+
+    }
+
+
+    //metodin suoritus tab näppäimen painalluksella ja käyttäjän syöttämällä tiedostopäätteellä.
+    public void srcOwnKeyPressed(KeyEvent keyEvent) {
+
+        extField.setOnKeyPressed(e->{
+            if (e.getCode()== KeyCode.TAB)
+            {
+                String ext = extField.getText();
+                String path = dirInput.getText();
+                System.out.println("TAB pressed");
+                String cmdArr[] = {"cmd","/c","dir",path};
+                Process p = null;
+                try {
+                    p = Runtime.getRuntime().exec(cmdArr);
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
+                //Jos järjestelmäkomento tuottaa jonkin tuloksen, meidän on kaapattava tulos luomalla BufferedReader,
+                // joka kääri prosessista palautetun InputStreamin eli tulostetaan tulos luettavassa mudossa.
+                BufferedReader reader = new BufferedReader(new InputStreamReader(p.getInputStream()));
+                String line;
+                String fileType;
+
+                //tiedostotyypin selvitys
+
+
+                while (true) {
+                    try {
+                        if (!((line = reader.readLine()) != null)) break;
+                    } catch (IOException ex) {
+                        throw new RuntimeException(ex);
+                    }
+                    File fName = new File(line);
+                    if (line.contains(ext))
+                    {
+
+
+                        //NÄYTETÄÄN VAIN TXT PÄÄTTEISET TIEDOSTOT
+                        txtBox.appendText(line+"\n");
+
+                    }
+
+
+
+                }
+
+
+                try {
+                    reader.close();
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
+
+            }
+        });
+
+    }
+
+    public void hideGP(ActionEvent actionEvent) {
+        functionsGP.setVisible(false);
     }
 }
