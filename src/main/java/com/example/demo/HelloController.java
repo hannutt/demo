@@ -13,11 +13,11 @@ import javafx.scene.layout.GridPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.lang.management.ManagementFactory;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -25,6 +25,7 @@ import java.util.Scanner;
 import java.net.InetAddress;
 import java.net.*;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Stream;
 
 public class HelloController {
     HelloApplication n = new HelloApplication();
@@ -50,6 +51,9 @@ public class HelloController {
     public Button memBtn;
 
     @FXML
+    public Label hiddenLbl;
+
+    @FXML
     public TextField pidTxt;
     @FXML
     public TextField urlField;
@@ -60,8 +64,7 @@ public class HelloController {
     @FXML
     public Button closeBtn;
 
-    @FXML
-    public  Button urlBtn;
+
 
     @FXML
     public MenuButton pids;
@@ -93,14 +96,6 @@ public class HelloController {
 
 
 
-
-
-
-
-
-
-
-
     //INITIALIZE METODI SUORITETAAN HETI OHJELMAN KÄYNNISTYESSÄ TÄSSÄ TAPAUKSESSA
     //SE KUTSUU SHOWUSER METODIA, JOKA TOTEUTETAAN HETI.
     public void initialize() {
@@ -116,6 +111,7 @@ public class HelloController {
         openPaint.setOnAction((e->{
             openApp.OpenPaint();
         }));
+
         showUser();
 
 
@@ -137,17 +133,12 @@ public class HelloController {
         pidTxt.setVisible(false);
         closeBtn.setVisible(false);
 
-        urlBtn.setVisible(false);
+
         java.lang.String javav = System.getProperty("java.version");
 
         //Installation directory for Java Runtime Environment (JRE)
         java.lang.String direc= System.getProperty("java.home");
         java.lang.String userName = System.getProperty("user.name");
-
-
-
-        //User account name
-
 
         txtBox.setText("Java version: "+ javav+" installed in: "+direc+"\n" );
         user.setText("User: " +userName);
@@ -158,10 +149,6 @@ public class HelloController {
     protected void showMemory() {
         pidTxt.setVisible(false);
         closeBtn.setVisible(false);
-
-        urlBtn.setVisible(false);
-
-
 
         double memorySize = ((OperatingSystemMXBean) ManagementFactory.getOperatingSystemMXBean()).getTotalMemorySize()/(1024.0*1024*1024);
         //pyöristys 2 desimaalin tarkkuuteen.
@@ -181,7 +168,7 @@ public class HelloController {
     public void processor() throws IOException {
         pidTxt.setVisible(false);
         closeBtn.setVisible(false);
-        urlBtn.setVisible(false);
+
         double cpuLoad = ((OperatingSystemMXBean) ManagementFactory.getOperatingSystemMXBean()).getProcessCpuLoad();
 
         //prosessorin id
@@ -287,19 +274,13 @@ public class HelloController {
                 //lisätään löydetyt prosessit listalle ja lisätään rivinvainto jokaisen
                 //alkion jälkeen
                 runningApps.add(res+"\n");
-
-
             }
-
-
             txtBox.setText(String.valueOf(runningApps));
 
             //metodin suorituksen myötä tekstikenttä tulee näkyviin
             pidTxt.setVisible(true);
             closeBtn.setVisible(true);
             urlField.setVisible(false);
-            urlBtn.setVisible(false);
-
 
         }).start();
         process.waitFor();
@@ -364,7 +345,7 @@ public class HelloController {
 
 
     public void NetWork(ActionEvent actionEvent) throws IOException, InterruptedException {
-        urlBtn.setVisible(true);
+
         pidTxt.setVisible(true);
         pingUrl.setVisible(true);
         String con="";
@@ -390,16 +371,14 @@ public class HelloController {
             int status = process.waitFor();
             if (status == 0)
             {
-                txtBox.setText("AVAILABLE");
+                txtBox.setText(urlStr + "OK");
+            }
+            else {
+                txtBox.setText(urlStr +"Error, can't reach");
             }
 
         }
-        else {
-            String urlStr = pidTxt.getText();
-            URL url = new URL(urlStr);
-            txtBox.setText(urlStr+ " protocol: "+url.getProtocol());
 
-        }
 
     }
 
@@ -421,130 +400,16 @@ public class HelloController {
 
     //haetaan kansio kovalelyltä ja tulostetaan sisältö txtboksissa.
     public void excecuteDIr(ActionEvent actionEvent) throws IOException, InterruptedException {
-
-        if (dirInput.getText().isEmpty()) {
-            //textfieldin taustaväri muutos punaiseksi jos se on tyhjä.
-            dirInput.setStyle("-fx-background-color: red;");
-            TimeUnit.SECONDS.sleep(3);
-            dirInput.setStyle("-fx-background-color: white;");
-
-        }
-        else if (hiddenFiles.isSelected())
-        {
-            String path = dirInput.getText();
-            String cmdArr[] = {"cmd", "/c", "dir/a:h", path};
-            Process p = Runtime.getRuntime().exec(cmdArr);
-            //Jos järjestelmäkomento tuottaa jonkin tuloksen, meidän on kaapattava tulos luomalla BufferedReader,
-            // joka kääri prosessista palautetun InputStreamin eli tulostetaan tulos luettavassa mudossa.
-            BufferedReader reader = new BufferedReader(new InputStreamReader(p.getInputStream()));
-            String line;
-            String fileType;
-
-            //tiedostotyypin selvitys
-
-
-            while ((line = reader.readLine()) != null) {
-                File fName = new File(line);
-                if (line.contains(".txt")) {
-
-                    //NÄYTETÄÄN VAIN TXT PÄÄTTEISET TIEDOSTOT
-                    //txtBox.appendText(line+"\n");
-
-                }
-
-
-                txtBox.appendText(line + "\n");
-            }
-
-
-
-            reader.close();
-        }
-
-
-        else {
-
-
-            String path = dirInput.getText();
-            String cmdArr[] = {"cmd", "/c", "dir", path};
-            Process p = Runtime.getRuntime().exec(cmdArr);
-            //Jos järjestelmäkomento tuottaa jonkin tuloksen, meidän on kaapattava tulos luomalla BufferedReader,
-            // joka kääri prosessista palautetun InputStreamin eli tulostetaan tulos luettavassa mudossa.
-            BufferedReader reader = new BufferedReader(new InputStreamReader(p.getInputStream()));
-            String line;
-            String fileType;
-
-            //tiedostotyypin selvitys
-
-
-            while ((line = reader.readLine()) != null) {
-                File fName = new File(line);
-                if (line.contains(".txt")) {
-
-                    //NÄYTETÄÄN VAIN TXT PÄÄTTEISET TIEDOSTOT
-                    //txtBox.appendText(line+"\n");
-
-                }
-
-
-                txtBox.appendText(line + "\n");
-            }
-
-
-
-            reader.close();
-        }
-
-
+        String path = dirInput.getText();
+        dir.DoStandardDir(path,txtBox,dirInput,hiddenFiles,hiddenLbl);
 
     }
 
 
 
     public void txtFileSrc(ActionEvent actionEvent) throws IOException, InterruptedException {
-        if (dirInput.getText().isEmpty())
-        {
-            //textfieldin taustaväri muutos punaiseksi.
-            dirInput.setStyle("-fx-background-color: red;");
-
-
-        }
-        else {
-            String path = dirInput.getText();
-
-            String cmdArr[] = {"cmd","/c","dir",path};
-            Process p = Runtime.getRuntime().exec(cmdArr);
-            //Jos järjestelmäkomento tuottaa jonkin tuloksen, meidän on kaapattava tulos luomalla BufferedReader,
-            // joka kääri prosessista palautetun InputStreamin eli tulostetaan tulos luettavassa mudossa.
-            BufferedReader reader = new BufferedReader(new InputStreamReader(p.getInputStream()));
-            String line;
-            String fileType;
-
-            //tiedostotyypin selvitys
-
-
-            while ((line = reader.readLine()) != null) {
-                File fName = new File(line);
-                if (line.contains(".txt"))
-                {
-
-                    //NÄYTETÄÄN VAIN TXT PÄÄTTEISET TIEDOSTOT
-                    txtBox.appendText(line+"\n");
-
-                }
-
-
-
-            }
-
-
-
-            reader.close();
-
-
-        }
-
-
+        String path = dirInput.getText();
+        dir.TxtFileSrc(path,txtBox,dirInput);
 
     }
 
@@ -589,18 +454,10 @@ public class HelloController {
                     File fName = new File(line);
                     if (line.contains(ext))
                     {
-
-
                         //NÄYTETÄÄN VAIN TXT PÄÄTTEISET TIEDOSTOT
                         txtBox.appendText(line+"\n");
-
                     }
-
-
-
                 }
-
-
                 try {
                     reader.close();
                 } catch (IOException ex) {
@@ -614,5 +471,12 @@ public class HelloController {
 
     public void hideGP(ActionEvent actionEvent) {
         functionsGP.setVisible(false);
+    }
+
+    public void SubDir(ActionEvent actionEvent) {
+        String path = dirInput.getText();
+        //alikansioiden haku isDirectoryn avulla ja tallennus listaan
+        dir.SubDirSrc(path,txtBox,dirInput);
+
     }
 }

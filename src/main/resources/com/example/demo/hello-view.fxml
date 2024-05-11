@@ -19,7 +19,6 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
 <VBox fx:id="mainV" alignment="CENTER" prefHeight="997.0" prefWidth="760.0" spacing="20.0" style="-fx-background-color: #5b7d78;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.demo.HelloController">
     <padding>
         <Insets bottom="20.0" left="20.0" right="20.0" top="10.0" />
@@ -87,17 +86,19 @@
          <Button fx:id="dirBtn" mnemonicParsing="false" onAction="#excecuteDIr" prefHeight="25.0" prefWidth="62.0" text="Dir" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="1" />
          <MenuButton mnemonicParsing="false" text="Advanced dir" GridPane.rowIndex="2">
            <items>
-             <MenuItem mnemonicParsing="false" onAction="#txtFileSrc" text=".*txt" />
+             <MenuItem mnemonicParsing="false" onAction="#txtFileSrc" text="Search .*txt" />
              <MenuItem fx:id="ext" mnemonicParsing="false" onAction="#srcOwnExt">
                   <graphic>
                      <TextField fx:id="extField" onKeyPressed="#srcOwnKeyPressed" />
                   </graphic>
                </MenuItem>
+               <MenuItem fx:id="subdirs" mnemonicParsing="false" onAction="#SubDir" text="Show sub-dir only" />
            </items>
          </MenuButton>
          <Button fx:id="hideBtn" mnemonicParsing="false" onAction="#hideGP" prefHeight="25.0" prefWidth="63.0" text="Hide" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="2" />
       </children>
    </GridPane>
+   <Label fx:id="hiddenLbl" prefHeight="17.0" prefWidth="413.0" text="Label" />
    <ImageView fx:id="tools" fitHeight="99.0" fitWidth="149.0" pickOnBounds="true" preserveRatio="true">
       <image>
          <Image url="@../../../../../../../../../../Users/Omistaja/Desktop/tools.jpg" />
@@ -112,19 +113,19 @@
        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
      </rowConstraints>
       <children>
       
-                                                                                                         <TextField fx:id="pidTxt" maxWidth="150.0" visible="false" GridPane.halignment="LEFT" />
+                                                                                                         <TextField fx:id="pidTxt" maxWidth="150.0" visible="false" GridPane.halignment="LEFT" GridPane.rowIndex="3" />
          <Button fx:id="closeBtn" mnemonicParsing="false" onAction="#closeTask" text="Close" visible="false" GridPane.columnIndex="1" GridPane.halignment="RIGHT" />
+         <CheckBox fx:id="pingUrl" mnemonicParsing="false" onAction="#checkUrl" text="Ping url" visible="false" GridPane.columnIndex="1" GridPane.rowIndex="3" />
       </children>
    </GridPane>
-    <TextArea fx:id="txtBox" maxHeight="170.0" maxWidth="472.0" minHeight="-Infinity" prefHeight="132.0" prefWidth="472.0" style="-fx-background-color: blue; -fx-border-radius: 50; -fx-border-w: 15;">
+    <TextArea fx:id="txtBox" maxHeight="170.0" maxWidth="472.0" minHeight="-Infinity" prefHeight="169.0" prefWidth="472.0" style="-fx-background-color: blue; -fx-border-radius: 50; -fx-border-w: 15; -fx-text-inner-color: blue;">
         <font>
             <Font name="Courier New" size="14.0" />
         </font>
    </TextArea>
-   <Button fx:id="urlBtn" mnemonicParsing="false" onAction="#checkUrl" text="Check" visible="false" />
-   <CheckBox fx:id="pingUrl" mnemonicParsing="false" text="Ping url" visible="false" />
 
                                                                                     </VBox>

@@ -15,6 +15,8 @@ public class OpenFiles {
     public TextArea txtBox;
     public String txtContent;
 
+    String userChoice;
+
     public String setTxtContent(String con)
     {
         this.txtContent = con;
@@ -27,7 +29,8 @@ public class OpenFiles {
 
     //avataan valittu tiedosto ohjelmalla joka osaa lukea tiedoston.
     public void OpenSelectedFile(File fileName) throws IOException {
-        String[] txt={"Notepad","Wordpad"};
+
+
         String fileType;
 
         //tiedostotyypin selvitys
@@ -35,34 +38,77 @@ public class OpenFiles {
         //tiedostopääte
         System.out.println(FilenameUtils.getExtension(String.valueOf(fileName)));
         System.out.println(fileType);
+
+        //jos tiedostotyyppi on tekstitiedosto
         if (Objects.equals(fileType, "text/plain"))
         {
-            //alasvetovalikko
-            ChoiceDialog<String> d = new ChoiceDialog<>(txt[0],txt[1],"Cancel");
-            d.showAndWait();
-            String choice = d.getSelectedItem();
-            if (Objects.equals(choice, "Wordpad"))
-            {
+            //kutsutaan metodia, joka asettaa ja näyttää dialogi-ikkunnassa tekstitiedoston
+            //avaamiseen sopivia vaihtoehtoja
+            SetTextList();
+            //jos metodissa userchoice kenttään on tallennettu (eli valittu) wordpad
+            if (Objects.equals(userChoice, "Wordpad"))
+            {  //avataan wordpad ja näytetään siinä valitun tiedoston sisältö.
                 Runtime.getRuntime().exec("cmd.exe /c Start wordpad.exe " + fileName);
 
             }
-            else if (Objects.equals(choice, "Notepad"))
+            else if (Objects.equals(userChoice, "Notepad"))
             {
                 Runtime.getRuntime().exec("cmd.exe /c Start notepad.exe " + fileName);
 
             }
-            else {
-                d.hide();
+
+
+        }
+        else if (Objects.equals(fileType, "image/jpeg"))
+        {
+            SetImgList();
+
+            if (Objects.equals(userChoice, "Paint"))
+            {
+                Runtime.getRuntime().exec("cmd.exe /c Start mspaint.exe " + fileName);
+
             }
 
         }
+        else if (Objects.equals(fileType,"audio/mpeg"))
+        {
+            SetAudioList();
+            if (Objects.equals(userChoice, "Media Player"))
+            {
+                Runtime.getRuntime().exec("cmd.exe /c Start wmplayer.exe " + fileName);
 
-
-
-
-
+            }
+        }
 
     }
+
+    public void SetTextList() {
+        String[] txt={"Notepad","Wordpad"};
+        //dialogin vaihtoehdoiksi asetetaan txt-listan sisältö
+        ChoiceDialog<String> d = new ChoiceDialog<>(txt[0],txt[1],"Cancel");
+        d.showAndWait();
+        //userchoice on kenttä eli luokan muuttuja johon käyttäjän valints tallennetaan.
+        userChoice = d.getSelectedItem();
+    }
+
+    public void SetImgList() {
+        String[] img={"Paint"};
+        ChoiceDialog<String> d = new ChoiceDialog<>(img[0],"Cancel");
+        d.showAndWait();
+        //String choice = d.getSelectedItem();
+        userChoice = d.getSelectedItem();
+
+    }
+
+    public void SetAudioList() {
+        String[] audio={"Media Player"};
+        ChoiceDialog<String> d = new ChoiceDialog<>(audio[0],"Cancel");
+        d.showAndWait();
+        //String choice = d.getSelectedItem();
+        userChoice = d.getSelectedItem();
+    }
+
+
     public void openAndShowTextbox(File file) throws IOException {
         String fileName = String.valueOf(file);
         File fileFinal = new File(fileName);

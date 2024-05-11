@@ -1,5 +1,6 @@
-My first Java/JavaFX application. The main idea of ​​this application is to collect hardware and software information about
-the device where the program is running and manage the running processes.
+My first Java/JavaFX application. The main idea of ​​this application is to collect hardware and software information
+the device where the program is running and manage the running processes. You can also run cmd commands with this app
+and manage files
 
 MAIN FEATURES:
 
@@ -25,16 +26,30 @@ the network feature also has a hidden text field and button that appear when the
 You can ping any web page and the program will tell you if the page is available or not.
 
 DIR FEATURE
+
 Displays a list of files and hidden files and subdirectories of directories in the user-entered path.
 The list appears in the program's text area component.
 This is done with cmd commands and Java Runtime & BufferReader classes.
-You can also list files by file extension by using ready-made options or by entering your own file extension.
+
+You can also perform more detailed searches, such as searching only for hidden files, 
+subfolders, or searching for files by file type.
+For example, select the Advanced dir option from the menu, enter a file extension and press TAB,
+and the program will search for files with the extension you entered.
+
 
 QUICK OPENER
 You can open common windows applications with one click from the drop down menu.
 Quick Opener uses the Java ProcessBuilder class to launch applications, except for the browser, which is launched using
 the java.awt.desktop class.
 You can also open the desired program or file. These features are made with Java File Chooser and Runtime classes.
+The program recognizes the file type and offers a few different options from which you can choose what you want to
+open the file with.
+
+So far, the program recognizes text, audio and image files and offers a few options from common Windows programs to
+open them.
+
+For example, when opening a text file, the program offers Worpad and Notepad applications in a dialog box 
+and waits until the user selects the application.
 
 GRAPHICS
 With the Graphics option, you can draw graphical pie charts of your ram memory and hard disk space.
