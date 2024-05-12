@@ -38,6 +38,59 @@ public class Dir {
         return this.PathName;
     }
 
+    public void DoDirBySize(String path, TextArea txtBox, TextField dirInput) throws IOException {
+
+        if (dirInput.getText().isEmpty()) {
+            //textfieldin taustaväri muutos punaiseksi jos se on tyhjä.
+            dirInput.setStyle("-fx-background-color: red;");
+            //dirInput.setStyle("-fx-background-color: white;");
+
+        }
+        else{
+            String cmdArr[] = {"cmd", "/c", "dir/o:s", path};
+            Process p = Runtime.getRuntime().exec(cmdArr);
+            //Jos järjestelmäkomento tuottaa jonkin tuloksen, meidän on kaapattava tulos luomalla BufferedReader,
+            // joka kääri prosessista palautetun InputStreamin eli tulostetaan tulos luettavassa mudossa.
+            BufferedReader reader = new BufferedReader(new InputStreamReader(p.getInputStream()));
+            String line;
+
+            while ((line = reader.readLine()) != null) {
+                File fName = new File(line);
+
+                txtBox.appendText(line + "\n");
+            }
+            reader.close();
+
+        }
+
+    }
+
+    public void DoBareFormatDir(String path, TextArea txtBox, TextField dirInput) throws IOException {
+        if (dirInput.getText().isEmpty()) {
+            //textfieldin taustaväri muutos punaiseksi jos se on tyhjä.
+            dirInput.setStyle("-fx-background-color: red;");
+            //dirInput.setStyle("-fx-background-color: white;");
+
+        }
+        else{
+            String cmdArr[] = {"cmd", "/c", "dir/b", path};
+            Process p = Runtime.getRuntime().exec(cmdArr);
+            //Jos järjestelmäkomento tuottaa jonkin tuloksen, meidän on kaapattava tulos luomalla BufferedReader,
+            // joka kääri prosessista palautetun InputStreamin eli tulostetaan tulos luettavassa mudossa.
+            BufferedReader reader = new BufferedReader(new InputStreamReader(p.getInputStream()));
+            String line;
+
+            while ((line = reader.readLine()) != null) {
+                File fName = new File(line);
+
+                txtBox.appendText(line + "\n");
+            }
+            reader.close();
+
+        }
+
+    }
+
 
     public void DoStandardDir(String path, TextArea txtBox, TextField dirInput, CheckBox hiddenFiles, Label hiddenLbl) throws IOException {
         if (dirInput.getText().isEmpty()) {

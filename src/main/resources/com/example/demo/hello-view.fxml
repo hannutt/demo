@@ -19,11 +19,11 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox fx:id="mainV" alignment="CENTER" prefHeight="997.0" prefWidth="760.0" spacing="20.0" style="-fx-background-color: #5b7d78;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.demo.HelloController">
+<VBox fx:id="mainV" alignment="CENTER" onKeyPressed="#showUi" prefHeight="997.0" prefWidth="760.0" spacing="20.0" style="-fx-background-color: #5b7d78;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.demo.HelloController">
     <padding>
         <Insets bottom="20.0" left="20.0" right="20.0" top="10.0" />
     </padding>
-    <Label style="-fx-font-size: 24;" text="SYSTEM INFO" textFill="#fffefe">
+    <Label fx:id="titleLbl" style="-fx-font-size: 24;" text="SYSTEM INFO" textFill="#fffefe">
         <font>
             <Font size="14.0" />
         </font>
@@ -57,6 +57,7 @@
             <Font name="HP Simplified Light" size="18.0" />
         </font>
    </Label>
+   <Label fx:id="UItip" opacity="0.0" prefHeight="17.0" prefWidth="140.0" text="PRESS S TO UNHIDE UI" />
    <CheckBox fx:id="hiddenFiles" mnemonicParsing="false" prefWidth="108.0" text="show hidden files" />
    <GridPane fx:id="functionsGP" maxWidth="242.0" prefHeight="107.0" prefWidth="242.0" style="-fx-background-color: #aac1e6; -fx-border-radius: 15;">
      <columnConstraints>
@@ -86,6 +87,7 @@
          <Button fx:id="dirBtn" mnemonicParsing="false" onAction="#excecuteDIr" prefHeight="25.0" prefWidth="62.0" text="Dir" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="1" />
          <MenuButton mnemonicParsing="false" text="Advanced dir" GridPane.rowIndex="2">
            <items>
+               <MenuItem fx:id="dirB" mnemonicParsing="false" onAction="#BareDir" text="Bare format" />
              <MenuItem mnemonicParsing="false" onAction="#txtFileSrc" text="Search .*txt" />
              <MenuItem fx:id="ext" mnemonicParsing="false" onAction="#srcOwnExt">
                   <graphic>
@@ -93,12 +95,12 @@
                   </graphic>
                </MenuItem>
                <MenuItem fx:id="subdirs" mnemonicParsing="false" onAction="#SubDir" text="Show sub-dir only" />
+               <MenuItem fx:id="bySize" mnemonicParsing="false" onAction="#sizeDir" text="Order by size" />
            </items>
          </MenuButton>
          <Button fx:id="hideBtn" mnemonicParsing="false" onAction="#hideGP" prefHeight="25.0" prefWidth="63.0" text="Hide" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="2" />
       </children>
    </GridPane>
-   <Label fx:id="hiddenLbl" prefHeight="17.0" prefWidth="413.0" text="Label" />
    <ImageView fx:id="tools" fitHeight="99.0" fitWidth="149.0" pickOnBounds="true" preserveRatio="true">
       <image>
          <Image url="@../../../../../../../../../../Users/Omistaja/Desktop/tools.jpg" />
@@ -120,6 +122,12 @@
                                                                                                          <TextField fx:id="pidTxt" maxWidth="150.0" visible="false" GridPane.halignment="LEFT" GridPane.rowIndex="3" />
          <Button fx:id="closeBtn" mnemonicParsing="false" onAction="#closeTask" text="Close" visible="false" GridPane.columnIndex="1" GridPane.halignment="RIGHT" />
          <CheckBox fx:id="pingUrl" mnemonicParsing="false" onAction="#checkUrl" text="Ping url" visible="false" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+         <MenuButton fx:id="processID" mnemonicParsing="false" text="MenuButton" GridPane.columnIndex="1" GridPane.rowIndex="1">
+           <items>
+             <MenuItem fx:id="item1" mnemonicParsing="false" text="Action 1" />
+             <MenuItem mnemonicParsing="false" text="Action 2" />
+           </items>
+         </MenuButton>
       </children>
    </GridPane>
     <TextArea fx:id="txtBox" maxHeight="170.0" maxWidth="472.0" minHeight="-Infinity" prefHeight="169.0" prefWidth="472.0" style="-fx-background-color: blue; -fx-border-radius: 50; -fx-border-w: 15; -fx-text-inner-color: blue;">

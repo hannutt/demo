@@ -18,8 +18,8 @@ File system -> shows the total status of the hard disk and the free space.
 Registry -> access to the Windows registry.
 
 Running applications-> shows running applications and their process ID.
-when you select the running apps option, a hidden text field and button will appear. 
-With these you can shut down the running process by entering the process id number in the text field and clicking the close button.
+The process IDs can be found on the tabs of the menu button, which you can click to close the application.
+
 
 Network -> shows your IP address, hostname and checks your Internet connection status by pinging an external web page.
 the network feature also has a hidden text field and button that appear when the feature is selected.
@@ -28,6 +28,9 @@ You can ping any web page and the program will tell you if the page is available
 DIR FEATURE
 
 Displays a list of files and hidden files and subdirectories of directories in the user-entered path.
+You can also use the Bare format option in the file list. This option only shows the names and file 
+extensions of the files in the folder. (dir /B cmd command.)
+Sort by Size displays files by size from smallest to largest (dir /o:s cmd command).
 The list appears in the program's text area component.
 This is done with cmd commands and Java Runtime & BufferReader classes.
 
@@ -35,6 +38,7 @@ You can also perform more detailed searches, such as searching only for hidden f
 subfolders, or searching for files by file type.
 For example, select the Advanced dir option from the menu, enter a file extension and press TAB,
 and the program will search for files with the extension you entered.
+
 
 
 QUICK OPENER
@@ -48,10 +52,11 @@ open the file with.
 So far, the program recognizes text, audio and image files and offers a few options from common Windows programs to
 open them.
 
-For example, when opening a text file, the program offers Worpad and Notepad applications in a dialog box 
+For example, when opening a text file, the program offers Wordpad and Notepad applications in a dialog box 
 and waits until the user selects the application.
 
 GRAPHICS
+
 With the Graphics option, you can draw graphical pie charts of your ram memory and hard disk space.
 you can also save the pie charts to your device in png format by clicking the save button.
 Graphic charts are made with the javafx.scene.chart library.

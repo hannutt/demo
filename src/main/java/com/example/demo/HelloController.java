@@ -2,6 +2,7 @@ package com.example.demo;
 
 import com.sun.management.OperatingSystemMXBean;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -10,6 +11,8 @@ import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
@@ -18,18 +21,20 @@ import java.lang.management.ManagementFactory;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 import java.net.InetAddress;
 import java.net.*;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Stream;
+import org.controlsfx.control.textfield.TextFields;
 
 public class HelloController {
     HelloApplication n = new HelloApplication();
     OpenApps openApp = new OpenApps();
+
+
+
 
     Dir dir = new Dir();
 
@@ -39,7 +44,9 @@ public class HelloController {
     public TextField osField;
     //tuodaan fxml tiedostosta
     @FXML
-    public Label user,title;
+    public MenuItem item1;
+    @FXML
+    public Label user, title,titleLbl;
 
     @FXML
     public TextArea txtBox;
@@ -48,10 +55,14 @@ public class HelloController {
     public Button graphBtn;
 
     @FXML
+    public MenuButton processID;
+    @FXML
+    public VBox mainV;
+    @FXML
     public Button memBtn;
 
     @FXML
-    public Label hiddenLbl;
+    public Label hiddenLbl,UItip;
 
     @FXML
     public TextField pidTxt;
@@ -65,16 +76,16 @@ public class HelloController {
     public Button closeBtn;
 
 
-
     @FXML
     public MenuButton pids;
     @FXML
     public Button noteBtn;
 
-    @FXML public MenuItem openNote,openChrome,openPaint;
+    @FXML
+    public MenuItem openNote, openChrome, openPaint;
 
     @FXML
-    public TextField dirInput,extField;
+    public TextField dirInput, extField;
 
     @FXML
     public GridPane functionsGP;
@@ -82,9 +93,9 @@ public class HelloController {
     @FXML
     public CheckBox hiddenFiles;
 
-    public  String HDserial;
-    public String setSerial(String p)
-    {
+    public String HDserial;
+
+    public String setSerial(String p) {
         this.HDserial = p;
         return this.HDserial;
 
@@ -100,15 +111,19 @@ public class HelloController {
     //SE KUTSUU SHOWUSER METODIA, JOKA TOTEUTETAAN HETI.
     public void initialize() {
 
+
+
+
+
         //openApp on OpenApps luokan olio ja tässä olion avulla käytetäänn
         //openapps luokan metodia.
-        openNote.setOnAction(e->{
+        openNote.setOnAction(e -> {
             openApp.OpenNote();
         });
-        openChrome.setOnAction((e->{
+        openChrome.setOnAction((e -> {
             openApp.OpenChrome();
         }));
-        openPaint.setOnAction((e->{
+        openPaint.setOnAction((e -> {
             openApp.OpenPaint();
         }));
 
@@ -117,15 +132,17 @@ public class HelloController {
 
 
     }
+
     @FXML
     protected void showOs() throws IOException {
 
         // käyttöjärjestelmän nimi ja version asetetaan txtBox id-nimellä
         //nimettyyn kenttään
-        txtBox.setText("Operating System: " +System.getProperty("os.name")+"\n" +"version: " +System.getProperty("os.version")+" Architecture: "+System.getProperty("os.arch")+"\n"
-                +"Windows " + System.getProperty("sun.arch.data.model")+" bit");
+        txtBox.setText("Operating System: " + System.getProperty("os.name") + "\n" + "version: " + System.getProperty("os.version") + " Architecture: " + System.getProperty("os.arch") + "\n"
+                + "Windows " + System.getProperty("sun.arch.data.model") + " bit");
 
     }
+
     @FXML
     protected void showJava() {
         //pidTxt ja closebtnia käytetään vain running apps metodin yhteydessä, joten ne tehdään
@@ -137,32 +154,31 @@ public class HelloController {
         java.lang.String javav = System.getProperty("java.version");
 
         //Installation directory for Java Runtime Environment (JRE)
-        java.lang.String direc= System.getProperty("java.home");
+        java.lang.String direc = System.getProperty("java.home");
         java.lang.String userName = System.getProperty("user.name");
 
-        txtBox.setText("Java version: "+ javav+" installed in: "+direc+"\n" );
-        user.setText("User: " +userName);
+        txtBox.setText("Java version: " + javav + " installed in: " + direc + "\n");
+        user.setText("User: " + userName);
 
 
     }
+
     @FXML
     protected void showMemory() {
         pidTxt.setVisible(false);
         closeBtn.setVisible(false);
 
-        double memorySize = ((OperatingSystemMXBean) ManagementFactory.getOperatingSystemMXBean()).getTotalMemorySize()/(1024.0*1024*1024);
+        double memorySize = ((OperatingSystemMXBean) ManagementFactory.getOperatingSystemMXBean()).getTotalMemorySize() / (1024.0 * 1024 * 1024);
         //pyöristys 2 desimaalin tarkkuuteen.
         double roundedTotalMemory = Math.floor(memorySize * 100) / 100.0;
-        double freeMemory = ((OperatingSystemMXBean) ManagementFactory.getOperatingSystemMXBean()).getFreeMemorySize()/(1024.0*1024*1024);
-        double roundedFree = Math.floor(freeMemory*100)/100.0;
+        double freeMemory = ((OperatingSystemMXBean) ManagementFactory.getOperatingSystemMXBean()).getFreeMemorySize() / (1024.0 * 1024 * 1024);
+        double roundedFree = Math.floor(freeMemory * 100) / 100.0;
         double usedMemory = roundedTotalMemory - roundedFree;
-        txtBox.setText("Total memory: "+roundedTotalMemory+ " GB"+"\nFree: "+roundedFree+" GB" +"\n"
-                + "memory in use: "+usedMemory +" GB");
-
-
-
-
+        txtBox.setText("Total memory: " + roundedTotalMemory + " GB" + "\nFree: " + roundedFree + " GB" + "\n"
+                + "memory in use: " + usedMemory + " GB");
     }
+
+
     @FXML
     //system.getenv saa parametrina ympäristömuuttujan
     public void processor() throws IOException {
@@ -179,7 +195,7 @@ public class HelloController {
         String line;
         line = reader.readLine();
         while ((line = reader.readLine()) != null) {
-            if (!line.trim().equals("")){
+            if (!line.trim().equals("")) {
                 //setteri tallettaan prosessorin id arvon
                 //getteri näyttää sen textboksissa.
                 n.setCpuID(line);
@@ -187,32 +203,29 @@ public class HelloController {
 
             }
         }
-        txtBox.setText("Processor: "+ System.getenv("PROCESSOR_IDENTIFIER")+"\n"+"Architechture: "+
-                System.getenv("PROCESSOR_ARCHITECTURE")+"\n"+
-                "Number of processors:"+
-                System.getenv("NUMBER_OF_PROCESSORS")+"\n"+"Processor ID: "+ n.getCpuID()
-                +"\n"+"CPU load: "+ Math.round(cpuLoad*100.0)/100.0 +" %");
-
-
-
-
+        txtBox.setText("Processor: " + System.getenv("PROCESSOR_IDENTIFIER") + "\n" + "Architechture: " +
+                System.getenv("PROCESSOR_ARCHITECTURE") + "\n" +
+                "Number of processors:" +
+                System.getenv("NUMBER_OF_PROCESSORS") + "\n" + "Processor ID: " + n.getCpuID()
+                + "\n" + "CPU load: " + Math.round(cpuLoad * 100.0) / 100.0 + " %");
 
 
     }
 
     public void showUser() {
         java.lang.String userName = System.getProperty("user.name");
-        user.setText("Cur. Windows username: " +userName);
+        user.setText("Cur. Windows username: " + userName);
+
     }
 
     public void filesystem() throws IOException {
-        Process p = Runtime.getRuntime().exec("cmd.exe /c vol c: " );
+        Process p = Runtime.getRuntime().exec("cmd.exe /c vol c: ");
         BufferedReader reader = new BufferedReader(new InputStreamReader(p.getInputStream()));
 
         String line;
         while ((line = reader.readLine()) != null) {
             System.out.println(line);
-            setSerial(line.replace("Volume Serial Number is",""));
+            setSerial(line.replace("Volume Serial Number is", ""));
 
         }
         reader.close();
@@ -225,17 +238,12 @@ public class HelloController {
         for (File root : roots) {
 
 
-
-
-            txtBox.setText("Hard drive serial number: "+getSerial()+  "\nFile system root: " + root.getAbsolutePath()+ "\n "+"Total Disk space (Gb): " +root.getTotalSpace()/(1024*1024*1024)+"\n" +
-                    ""+ "free disk space (GB): "+root.getUsableSpace()/(1024*1024*1024)+"\n"
-                    + "current directory: "+curDir+" "+ System.getenv("PROGRAM_FILES"));
+            txtBox.setText("Hard drive serial number: " + getSerial() + "\nFile system root: " + root.getAbsolutePath() + "\n " + "Total Disk space (Gb): " + root.getTotalSpace() / (1024 * 1024 * 1024) + "\n" +
+                    "" + "free disk space (GB): " + root.getUsableSpace() / (1024 * 1024 * 1024) + "\n"
+                    + "current directory: " + curDir + " " + System.getenv("PROGRAM_FILES"));
 
 
         }
-
-
-
 
 
     }
@@ -244,7 +252,7 @@ public class HelloController {
 
     public void openGraph(ActionEvent actionEvent) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("graphics.fxml"));
-        Parent root1 = (Parent)fxmlLoader.load();
+        Parent root1 = (Parent) fxmlLoader.load();
         Stage stage = new Stage();
         stage.setTitle("Graphics");
 
@@ -252,15 +260,69 @@ public class HelloController {
         stage.show();
     }
 
+
+
+    public void showRunningPids() throws IOException, InterruptedException {
+
+        List<String> runningPids = new ArrayList<String>();
+        Process pidsOnly = new ProcessBuilder("powershell", "\"gps| ? {$_.mainwindowtitle.length -ne 0} | Format-Table -HideTableHeaders  ID").start();
+
+        new Thread(() -> {
+            int count =0;
+            int i = 0;
+            Scanner sc = new Scanner(pidsOnly.getInputStream());
+            if (sc.hasNextLine()) sc.nextLine();
+            while (sc.hasNextLine()) {
+                count = count + 1;
+
+
+                String line = sc.nextLine();
+                //poistetaan välilyönnit
+                String res = line.replaceAll(" ", "");
+                System.out.println(res);
+
+                //lisätään löydetyt prosessit listalle ja lisätään rivinvainto jokaisen
+                //alkion jälkeen
+                runningPids.add(res + "\n");
+                //process id numeroiden siirto menuitemiin, i kasvaa aina yhdellä
+                //jolloin seuraava listalla oleva pid lisätään menuitemiin.
+                MenuItem m1 = new MenuItem(runningPids.get(i));
+                i = i + 1;
+                processID.getItems().add((m1));
+                EventHandler<ActionEvent> event1 = new EventHandler<ActionEvent>() {
+                    public void handle(ActionEvent e)
+                    {
+                        System.out.println(((MenuItem)e.getSource()).getText() + " selected");
+                    }
+                };
+                m1.setOnAction(event1);
+
+
+            }
+            System.out.println(count);
+
+
+
+
+            System.out.println(runningPids);
+
+
+        }).start();
+        pidsOnly.waitFor();
+
+    }
+
+
     //käynnissä olevien sovellusten haku ja näyttö
     public void showRunningApps(ActionEvent actionEvent) throws IOException, InterruptedException {
+        showRunningPids();
         //luodaan merkkijonolista
 
         List<String> runningApps = new ArrayList<String>();
-        List<Integer>runningPids = new ArrayList<Integer>();
+
         //lisäämällä ID namen jälkeen saa process id:n
-        java.lang.Process process2 = new ProcessBuilder("powershell","\"gps| ? {$_.mainwindowtitle.length -ne 0} | Format-Table -HideTableHeaders  name,ID").start();
-        java.lang.Process process = new ProcessBuilder("powershell","\"gps| ? {$_.mainwindowtitle.length -ne 0} | Format-Table -HideTableHeaders  name,ID").start();
+
+        java.lang.Process process = new ProcessBuilder("powershell", "\"gps| ? {$_.mainwindowtitle.length -ne 0} | Format-Table -HideTableHeaders  name,ID").start();
         new Thread(() -> {
             Scanner sc = new Scanner(process.getInputStream());
             if (sc.hasNextLine()) sc.nextLine();
@@ -268,19 +330,19 @@ public class HelloController {
 
                 String line = sc.nextLine();
                 //poistetaan välilyönnit
-                String res = line.replaceAll(" ","");
+                String res = line.replaceAll(" ", "");
                 System.out.println(res);
 
                 //lisätään löydetyt prosessit listalle ja lisätään rivinvainto jokaisen
                 //alkion jälkeen
-                runningApps.add(res+"\n");
+                runningApps.add(res + "\n");
             }
             txtBox.setText(String.valueOf(runningApps));
 
             //metodin suorituksen myötä tekstikenttä tulee näkyviin
             pidTxt.setVisible(true);
             closeBtn.setVisible(true);
-            urlField.setVisible(false);
+            //urlField.setVisible(false);
 
         }).start();
         process.waitFor();
@@ -290,12 +352,11 @@ public class HelloController {
         java.lang.String pid = pidTxt.getText();
         int pidInt = Integer.parseInt(pid);
 
-        try{
+        try {
             //prosessin sulku process id:n perusteella.
             ProcessHandle.of(pidInt).ifPresent(ProcessHandle::destroy);
 
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             System.out.println("not found");
         }
 
@@ -336,8 +397,7 @@ public class HelloController {
         Stage stage = new Stage();
         FileChooser fc = new FileChooser();
         File fileName = fc.showOpenDialog(stage);
-        if (fileName != null)
-        {
+        if (fileName != null) {
             //metodi avaa valitun tiedoston sopivalla ohjelmalla
             openFile.OpenSelectedFile(fileName);
         }
@@ -348,33 +408,29 @@ public class HelloController {
 
         pidTxt.setVisible(true);
         pingUrl.setVisible(true);
-        String con="";
+        String con = "";
         Process process = java.lang.Runtime.getRuntime().exec("ping www.google.com");
         int status = process.waitFor();
-        if (status ==0)
-        {
+        if (status == 0) {
             con = "Online";
 
-        }
-        else {
+        } else {
             con = "Offline";
         }
-        txtBox.setText("IP-address: "+InetAddress.getLocalHost().getHostAddress()+"\n"+
-                "Hostname: "+InetAddress.getLocalHost().getHostName()+"\n"+"Internet connection: "+con
-                );
+        txtBox.setText("IP-address: " + InetAddress.getLocalHost().getHostAddress() + "\n" +
+                "Hostname: " + InetAddress.getLocalHost().getHostName() + "\n" + "Internet connection: " + con
+        );
     }
 
     public void checkUrl(ActionEvent actionEvent) throws IOException, InterruptedException {
         if (pingUrl.isSelected()) {
             String urlStr = pidTxt.getText();
-            Process process = java.lang.Runtime.getRuntime().exec("ping "+urlStr);
+            Process process = java.lang.Runtime.getRuntime().exec("ping " + urlStr);
             int status = process.waitFor();
-            if (status == 0)
-            {
+            if (status == 0) {
                 txtBox.setText(urlStr + "OK");
-            }
-            else {
-                txtBox.setText(urlStr +"Error, can't reach");
+            } else {
+                txtBox.setText(urlStr + "Error, can't reach");
             }
 
         }
@@ -384,16 +440,15 @@ public class HelloController {
 
 
     public void winReg(ActionEvent actionEvent) throws IOException {
-        Process process =  Runtime.getRuntime().exec("cmd reg query /?" );
+        Process process = Runtime.getRuntime().exec("cmd reg query /?");
         BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
         System.out.println(reader);
         String line;
         while ((line = reader.readLine()) != null) {
             System.out.println(line);
-            txtBox.appendText(line+"\n");
+            txtBox.appendText(line + "\n");
         }
         reader.close();
-
 
 
     }
@@ -401,15 +456,14 @@ public class HelloController {
     //haetaan kansio kovalelyltä ja tulostetaan sisältö txtboksissa.
     public void excecuteDIr(ActionEvent actionEvent) throws IOException, InterruptedException {
         String path = dirInput.getText();
-        dir.DoStandardDir(path,txtBox,dirInput,hiddenFiles,hiddenLbl);
+        dir.DoStandardDir(path, txtBox, dirInput, hiddenFiles, hiddenLbl);
 
     }
 
 
-
     public void txtFileSrc(ActionEvent actionEvent) throws IOException, InterruptedException {
         String path = dirInput.getText();
-        dir.TxtFileSrc(path,txtBox,dirInput);
+        dir.TxtFileSrc(path, txtBox, dirInput);
 
     }
 
@@ -423,13 +477,12 @@ public class HelloController {
     //metodin suoritus tab näppäimen painalluksella ja käyttäjän syöttämällä tiedostopäätteellä.
     public void srcOwnKeyPressed(KeyEvent keyEvent) {
 
-        extField.setOnKeyPressed(e->{
-            if (e.getCode()== KeyCode.TAB)
-            {
+        extField.setOnKeyPressed(e -> {
+            if (e.getCode() == KeyCode.TAB) {
                 String ext = extField.getText();
                 String path = dirInput.getText();
                 System.out.println("TAB pressed");
-                String cmdArr[] = {"cmd","/c","dir",path};
+                String cmdArr[] = {"cmd", "/c", "dir", path};
                 Process p = null;
                 try {
                     p = Runtime.getRuntime().exec(cmdArr);
@@ -452,10 +505,9 @@ public class HelloController {
                         throw new RuntimeException(ex);
                     }
                     File fName = new File(line);
-                    if (line.contains(ext))
-                    {
+                    if (line.contains(ext)) {
                         //NÄYTETÄÄN VAIN TXT PÄÄTTEISET TIEDOSTOT
-                        txtBox.appendText(line+"\n");
+                        txtBox.appendText(line + "\n");
                     }
                 }
                 try {
@@ -469,14 +521,53 @@ public class HelloController {
 
     }
 
+    //Grip panen piilotus ja UItip labelin näyttö
     public void hideGP(ActionEvent actionEvent) {
-        functionsGP.setVisible(false);
+        functionsGP.setOpacity(0.0);
+        UItip.setOpacity(1.0);
     }
 
     public void SubDir(ActionEvent actionEvent) {
         String path = dirInput.getText();
         //alikansioiden haku isDirectoryn avulla ja tallennus listaan
-        dir.SubDirSrc(path,txtBox,dirInput);
+        dir.SubDirSrc(path, txtBox, dirInput);
 
+    }
+
+
+    public void BareDir(ActionEvent actionEvent) throws IOException {
+        String path = dirInput.getText();
+        dir.DoBareFormatDir(path, txtBox, dirInput);
+    }
+
+    public void sizeDir(ActionEvent actionEvent) throws IOException {
+
+        String path = dirInput.getText();
+        dir.DoDirBySize(path, txtBox, dirInput);
+    }
+
+
+
+
+
+
+
+    public void showUi(KeyEvent keyEvent) {
+        mainV.setOnKeyPressed(e -> {
+            if (e.getCode() == KeyCode.S) {
+                System.out.println("s pressed");
+                //set opacity toimii true/falsea paremmin uin piilottamisessa ja uudelleen näyttämisessä
+                functionsGP.setOpacity(1.0);
+                UItip.setOpacity(0.0);
+                //suoritetaan task n sekunnin kuluttua.
+
+
+
+
+
+
+
+            }
+        });
     }
 }
