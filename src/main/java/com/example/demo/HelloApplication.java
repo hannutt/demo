@@ -165,8 +165,10 @@ public class HelloApplication extends Application {
         Group root = new Group(pieChart);
         Scene scene = new Scene(root,600,400);
         Stage stage = new Stage();
+
         stage.setScene(scene);
         stage.show();
+
     }
 
     //piechartin tallennus png muotoisena

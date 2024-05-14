@@ -42,6 +42,7 @@ and the program will search for files with the extension you entered.
 
 
 QUICK OPENER
+
 You can open common windows applications with one click from the drop down menu.
 Quick Opener uses the Java ProcessBuilder class to launch applications, except for the browser, which is launched using
 the java.awt.desktop class.
@@ -61,3 +62,8 @@ With the Graphics option, you can draw graphical pie charts of your ram memory a
 you can also save the pie charts to your device in png format by clicking the save button.
 Graphic charts are made with the javafx.scene.chart library.
 On the hard disk option program searches all the hard disks of your device and finally asks you to select the hard disk whose data you want to see in the pie chart.
+
+CUSTOMIZATION
+
+You can make some customizations, such as hide or show part of the interface, reduce or increase font sizes
+change background colors.

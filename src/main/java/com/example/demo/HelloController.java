@@ -13,25 +13,21 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import java.io.*;
 import java.lang.management.ManagementFactory;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.*;
 
 import java.net.InetAddress;
-import java.net.*;
-import java.util.concurrent.TimeUnit;
-import java.util.stream.Stream;
-import org.controlsfx.control.textfield.TextFields;
 
 public class HelloController {
     HelloApplication n = new HelloApplication();
     OpenApps openApp = new OpenApps();
+
+    Customization c = new Customization();
 
 
 
@@ -268,12 +264,11 @@ public class HelloController {
         Process pidsOnly = new ProcessBuilder("powershell", "\"gps| ? {$_.mainwindowtitle.length -ne 0} | Format-Table -HideTableHeaders  ID").start();
 
         new Thread(() -> {
-            int count =0;
+
             int i = 0;
             Scanner sc = new Scanner(pidsOnly.getInputStream());
             if (sc.hasNextLine()) sc.nextLine();
             while (sc.hasNextLine()) {
-                count = count + 1;
 
 
                 String line = sc.nextLine();
@@ -288,20 +283,24 @@ public class HelloController {
                 //jolloin seuraava listalla oleva pid lisätään menuitemiin.
                 MenuItem m1 = new MenuItem(runningPids.get(i));
                 i = i + 1;
+                //prosessi id:n lisäys menuitemiin.
                 processID.getItems().add((m1));
                 EventHandler<ActionEvent> event1 = new EventHandler<ActionEvent>() {
                     public void handle(ActionEvent e)
                     {
-                        System.out.println(((MenuItem)e.getSource()).getText() + " selected");
+                        //valittu menuitem talletetaan idvaluen muuttujaan
+                        String idvalue = ((MenuItem)e.getSource()).getText();
+                        //asetetaan valittu pid tekstikenttään.
+                        pidTxt.setText(idvalue);
+                        closeProcess();
+                       // showPidValue(idvalue);
                     }
                 };
+                //menuitemeille lisätään tapahtumankäsittelijät.
                 m1.setOnAction(event1);
 
 
             }
-            System.out.println(count);
-
-
 
 
             System.out.println(runningPids);
@@ -341,14 +340,16 @@ public class HelloController {
 
             //metodin suorituksen myötä tekstikenttä tulee näkyviin
             pidTxt.setVisible(true);
-            closeBtn.setVisible(true);
+
             //urlField.setVisible(false);
 
         }).start();
         process.waitFor();
     }
 
-    public void closeTask(ActionEvent actionEvent) {
+
+
+    public void closeProcess() {
         java.lang.String pid = pidTxt.getText();
         int pidInt = Integer.parseInt(pid);
 
@@ -547,19 +548,14 @@ public class HelloController {
     }
 
 
-
-
-
-
-
     public void showUi(KeyEvent keyEvent) {
+    //painamalla näppäintä s ui näytetään.
         mainV.setOnKeyPressed(e -> {
             if (e.getCode() == KeyCode.S) {
-                System.out.println("s pressed");
                 //set opacity toimii true/falsea paremmin uin piilottamisessa ja uudelleen näyttämisessä
                 functionsGP.setOpacity(1.0);
                 UItip.setOpacity(0.0);
-                //suoritetaan task n sekunnin kuluttua.
+
 
 
 
@@ -569,5 +565,28 @@ public class HelloController {
 
             }
         });
+    }
+
+    public void increaseFont(ActionEvent actionEvent) {
+
+        c.DoFontIncrease(txtBox);
+
+
+    }
+
+
+    public void decreaceFont(ActionEvent actionEvent) {
+     c.DoFontDecrease(txtBox);
+
+    }
+
+    public void colChoose(ActionEvent actionEvent) {
+        c.ColorPick();
+    }
+
+    public void changeBlue(ActionEvent actionEvent) {
+        c.DoChangeToBlue(txtBox);
+
+
     }
 }
