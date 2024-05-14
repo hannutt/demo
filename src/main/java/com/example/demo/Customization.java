@@ -44,6 +44,7 @@ public class Customization {
 
         //luodaan oma ikkuna color pickerille.
         Group root = new Group(vb);
+
         vb.getChildren().add(new javafx.scene.control.Button("blue"));
 
 
