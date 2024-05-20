@@ -32,6 +32,9 @@ You can ping any web page and the program will tell you if the page is available
 If the ping is ok, the program will show the WebView check box. By clicking on it, you will
 see the webpage you are looking for in javaFX webView.
 
+After selecting a wlan network, you can also run the "netsh wlan show profile name=" command, which will display. 
+more detailed information about the selected wlan network in the program's text area.
+
 DIR FEATURE
 
 Displays a list of files and hidden files and subdirectories of directories in the user-entered path.

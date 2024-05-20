@@ -1,5 +1,7 @@
 package com.example.demo;
 
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -20,6 +22,9 @@ public class Network {
     public MenuButton processID;
     @FXML
     public TextField pidTxt;
+
+    @FXML
+    public TextArea txtBox;
 
     public void ShowNetworkInfo(TextField pidTxt, CheckBox pingUrl, TextArea txtBox, MenuButton processID) throws IOException, InterruptedException {
         pidTxt.setVisible(true);
@@ -50,18 +55,33 @@ public class Network {
                 //korvataan all user profile teksti tyhjällä.
                 wlans.add(netshLine.replace("All User Profile",""));
                 MenuItem m1 = new MenuItem(wlans.get(i));
+                //kierrosmuuttuja
                 i = i + 1;
-                //prosessi id:n lisäys menuitemiin.
+                //wlannin lisäys menuitemiin.
                 processID.getItems().add((m1));
+                EventHandler<ActionEvent> wifiEvent = new EventHandler<ActionEvent>() {
+                    public void handle(ActionEvent e)
+                    {
+                        //valitun menuitemin teksti talletetaan muuttujaan
+                        String wifiname = ((MenuItem)e.getSource()).getText();
 
-
-
-
+                        //poistetaan muuttujan merkkijonosto whitespacet ja korvataa : merkki tyhjällä
+                        //jonka jälkeen näytetään lopputulos input kentässä.
+                        pidTxt.setText(wifiname.trim().replace(":",""));
+                        // showPidValue(idvalue);
+                        try {
+                            wlandAdanced(wifiname.trim().replace(":",""),txtBox);
+                        } catch (IOException ex) {
+                            throw new RuntimeException(ex);
+                        } catch (InterruptedException ex) {
+                            throw new RuntimeException(ex);
+                        }
+                    }
+                };
+                //menuitemeille lisätään tapahtumankäsittelijät.
+                m1.setOnAction(wifiEvent);
                 System.out.println(netshLine);
                 txtBox.appendText(netshLine.trim()+"\n");
-
-
-
             }
 
         }).start();
@@ -69,6 +89,28 @@ public class Network {
 
 
     }
+
+    public void wlandAdanced(String wifiname, TextArea txtBox) throws IOException, InterruptedException {
+        System.out.println(wifiname);
+        Process p = Runtime.getRuntime().exec("netsh wlan show profile name="+wifiname);
+        new Thread(() -> {
+            int i = 0;
+
+            Scanner sc = new Scanner(p.getInputStream());
+            if (sc.hasNextLine()) sc.nextLine();
+            while (sc.hasNextLine()) {
+
+                String wlantxt = sc.nextLine();
+                this.txtBox.appendText(wlantxt);
+
+            }
+
+        }).start();
+        p.waitFor();
+
+    }
+
+
 
 
     public void DoPing(TextArea txtBox, CheckBox pingUrl, TextField pidTxt, CheckBox wView) throws IOException, InterruptedException {

@@ -342,7 +342,7 @@ public class HelloController {
                 i = i + 1;
                 //prosessi id:n lisäys menuitemiin.
                 processID.getItems().add((m1));
-                EventHandler<ActionEvent> event1 = new EventHandler<ActionEvent>() {
+                EventHandler<ActionEvent> pidEvent = new EventHandler<ActionEvent>() {
                     public void handle(ActionEvent e)
                     {
                         //valittu menuitem talletetaan idvaluen muuttujaan
@@ -354,7 +354,7 @@ public class HelloController {
                     }
                 };
                 //menuitemeille lisätään tapahtumankäsittelijät.
-                m1.setOnAction(event1);
+                m1.setOnAction(pidEvent);
 
 
             }
