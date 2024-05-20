@@ -56,6 +56,7 @@
                <MenuItem mnemonicParsing="false" onAction="#decreaceFont" text="Font size -" />
                <MenuItem mnemonicParsing="false" onAction="#colChoose" text="Change text color" />
                <MenuItem mnemonicParsing="false" onAction="#changeBlue" text="BG col Blue" />
+               <MenuItem mnemonicParsing="false" onAction="#BoldText" text="Bold text" />
            </items>
          </Menu>
        <Menu fx:id="Fc" mnemonicParsing="false" text="Select the app. to open">
@@ -68,13 +69,16 @@
          <DropShadow />
       </effect>
    </MenuBar>
-   <CheckBox fx:id="hiddenFiles" mnemonicParsing="false" prefWidth="108.0" text="show hidden files" />
+   <Label fx:id="fwstatus" textFill="WHITE">
+      <font>
+         <Font size="14.0" />
+      </font></Label>
     <Label fx:id="user" prefHeight="22.0" prefWidth="264.0" textFill="WHITE">
         <font>
             <Font name="HP Simplified Light" size="18.0" />
         </font>
    </Label>
-   <GridPane fx:id="functionsGP" maxWidth="242.0" prefHeight="107.0" prefWidth="242.0" style="-fx-background-color: #aac1e6; -fx-border-radius: 15;">
+   <GridPane fx:id="functionsGP" maxWidth="289.0" prefHeight="131.0" prefWidth="289.0" style="-fx-background-color: #aac1e6; -fx-border-radius: 15;">
      <columnConstraints>
        <ColumnConstraints hgrow="SOMETIMES" maxWidth="165.0" minWidth="10.0" prefWidth="113.0" />
        <ColumnConstraints hgrow="SOMETIMES" maxWidth="107.0" minWidth="10.0" prefWidth="107.0" />
@@ -98,22 +102,24 @@
               </items>
           </MenuButton>
           <Button fx:id="graphBtn" mnemonicParsing="false" onAction="#openGraph" text="Graphics" GridPane.columnIndex="1" GridPane.halignment="RIGHT" />
-         <TextField fx:id="dirInput" maxWidth="200.0" prefHeight="25.0" prefWidth="111.0" GridPane.rowIndex="1" />
-         <Button fx:id="dirBtn" mnemonicParsing="false" onAction="#excecuteDIr" prefHeight="25.0" prefWidth="62.0" text="Dir" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="1" />
+         <TextField fx:id="dirInput" maxWidth="200.0" prefHeight="25.0" prefWidth="182.0" GridPane.rowIndex="1" />
+         <Button fx:id="dirBtn" mnemonicParsing="false" onAction="#excecuteDIr" prefHeight="25.0" prefWidth="62.0" text="Dir" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="1" />
          <MenuButton mnemonicParsing="false" text="Advanced dir" GridPane.rowIndex="2">
            <items>
                <MenuItem fx:id="dirB" mnemonicParsing="false" onAction="#BareDir" text="Bare format" />
              <MenuItem mnemonicParsing="false" onAction="#txtFileSrc" text="Search .*txt" />
-             <MenuItem fx:id="ext" mnemonicParsing="false" onAction="#srcOwnExt">
+             <MenuItem fx:id="ext" mnemonicParsing="false" onAction="#srcOwnExt" text="enter a extension">
                   <graphic>
                      <TextField fx:id="extField" onKeyPressed="#srcOwnKeyPressed" />
                   </graphic>
                </MenuItem>
                <MenuItem fx:id="subdirs" mnemonicParsing="false" onAction="#SubDir" text="Show sub-dir only" />
                <MenuItem fx:id="bySize" mnemonicParsing="false" onAction="#sizeDir" text="Order by size" />
+               <MenuItem fx:id="hiddenSearch" mnemonicParsing="false" onAction="#hiddenFileSearch" text="Search hidden files" />
            </items>
          </MenuButton>
          <Button fx:id="hideBtn" mnemonicParsing="false" onAction="#hideGP" prefHeight="25.0" prefWidth="63.0" text="Hide" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="2" />
+         <Button fx:id="findBtn" mnemonicParsing="false" onAction="#findFile" text="Find" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="1" />
       </children>
    </GridPane>
    <Label fx:id="UItip" opacity="0.0" prefHeight="17.0" prefWidth="140.0" text="PRESS S TO UNHIDE UI" />
@@ -138,6 +144,7 @@
                                                                                                          <TextField fx:id="pidTxt" maxWidth="150.0" visible="false" GridPane.halignment="LEFT" GridPane.rowIndex="1" />
          <CheckBox fx:id="pingUrl" mnemonicParsing="false" onAction="#checkUrl" text="Ping url" visible="false" GridPane.columnIndex="1" GridPane.rowIndex="3" />
          <MenuButton fx:id="processID" mnemonicParsing="false" text="Close process" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+         <CheckBox fx:id="wView" mnemonicParsing="false" onAction="#showWview" text="WebView" visible="false" GridPane.rowIndex="3" />
       </children>
    </GridPane>
     <TextArea fx:id="txtBox" maxHeight="170.0" maxWidth="472.0" minHeight="-Infinity" prefHeight="169.0" prefWidth="472.0" style="-fx-background-color: blue; -fx-border-radius: 50; -fx-border-w: 15; -fx-text-inner-color: blue;">

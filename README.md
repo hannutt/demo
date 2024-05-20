@@ -1,13 +1,17 @@
 My first Java/JavaFX application. The main idea of ​​this application is to collect hardware and software information
-the device where the program is running and manage the running processes. You can also run cmd commands with this app
-and manage files
+the device where the program is running and manage the running processes. You can also run cmd, wmic and netsh commands with this app
+and manage file searches.
 
 MAIN FEATURES:
 
+Automatic functions at startup:
+
+The logged-in Windows user is automatically displayed when the program is run.
+The status of the Windows firewall is also checked automatically and the status is shown on the label (Firewall ON/OFF)
+
+
 Graphical user interface made with Gluon's Scene Builder. UI contains a dropdown menu, where you can select an option.
 Options are:
-
-windows user -> The logged-in Windows user is automatically displayed when the program is run.
 
 These are executed when you select them:
 OS -> shows information about your operating system.
@@ -17,13 +21,16 @@ Java -> shows your Java version and installation directory.
 File system -> shows the total status of the hard disk and the free space.
 Registry -> access to the Windows registry.
 
+
 Running applications-> shows running applications and their process ID.
 The process IDs can be found on the tabs of the menu button, which you can click to close the application.
 
 
-Network -> shows your IP address, hostname and checks your Internet connection status by pinging an external web page.
+Network -> shows your IP address, available wlan networks, hostname and checks your Internet connection status by pinging an external web page.
 the network feature also has a hidden text field and button that appear when the feature is selected.
 You can ping any web page and the program will tell you if the page is available or not.
+If the ping is ok, the program will show the WebView check box. By clicking on it, you will
+see the webpage you are looking for in javaFX webView.
 
 DIR FEATURE
 
@@ -66,4 +73,4 @@ On the hard disk option program searches all the hard disks of your device and f
 CUSTOMIZATION
 
 You can make some customizations, such as hide or show part of the interface, reduce or increase font sizes
-change background colors.
+change background colors. You can also change the colors of the text in the text area and make the text bold.

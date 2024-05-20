@@ -38,6 +38,18 @@ public class Dir {
         return this.PathName;
     }
 
+    public void DoSearch(TextField dirInput) {
+        String p = dirInput.getText();
+        String sep = "\\\\";
+        String[] myArray = p.split(sep);
+        for (String s : myArray) {
+            if (s.contains(".")) {
+                System.out.println(s);
+            }
+
+
+        }
+    }
     public void DoDirBySize(String path, TextArea txtBox, TextField dirInput) throws IOException {
 
         if (dirInput.getText().isEmpty()) {
@@ -99,33 +111,7 @@ public class Dir {
             //dirInput.setStyle("-fx-background-color: white;");
 
         }
-        else if (hiddenFiles.isSelected())
-        {
 
-            String cmdArr[] = {"cmd", "/c", "dir/a:h", path};
-            Process p = Runtime.getRuntime().exec(cmdArr);
-            //Jos järjestelmäkomento tuottaa jonkin tuloksen, meidän on kaapattava tulos luomalla BufferedReader,
-            // joka kääri prosessista palautetun InputStreamin eli tulostetaan tulos luettavassa mudossa.
-            BufferedReader reader = new BufferedReader(new InputStreamReader(p.getInputStream()));
-            String line;
-            String fileType;
-
-            //tiedostotyypin selvitys
-
-
-            while ((line = reader.readLine()) != null) {
-                File fName = new File(line);
-                if (line.contains(".txt")) {
-
-                    //NÄYTETÄÄN VAIN TXT PÄÄTTEISET TIEDOSTOT
-                    //txtBox.appendText(line+"\n");
-                }
-
-                txtBox.appendText(line + "\n");
-            }
-
-            reader.close();
-        }
 
 
         else {
@@ -169,6 +155,26 @@ public class Dir {
             reader.close();
             hiddenFileReader.close();
         }
+
+    }
+
+    public void DoHiddenFileSearch(String path, TextArea txtBox) throws IOException {
+        String cmdArr[] = {"cmd", "/c", "dir/a:h", path};
+        Process p = Runtime.getRuntime().exec(cmdArr);
+            //Jos järjestelmäkomento tuottaa jonkin tuloksen, meidän on kaapattava tulos luomalla BufferedReader,
+            // joka kääri prosessista palautetun InputStreamin eli tulostetaan tulos luettavassa mudossa.
+        BufferedReader reader = new BufferedReader(new InputStreamReader(p.getInputStream()));
+        String line;
+        String fileType;
+
+            //tiedostotyypin selvitys
+
+        while ((line = reader.readLine()) != null) {
+            File fName = new File(line);
+            txtBox.appendText(line + "\n");
+            }
+
+            reader.close();
 
     }
 

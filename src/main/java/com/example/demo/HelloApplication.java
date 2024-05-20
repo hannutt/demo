@@ -137,12 +137,6 @@ public class HelloApplication extends Application {
     public Label user;
 
 
-
-
-
-
-
-
     public static void main(String[] args) {
         launch();
     }

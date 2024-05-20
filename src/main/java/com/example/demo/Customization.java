@@ -1,15 +1,13 @@
 package com.example.demo;
 
 import javafx.fxml.FXML;
-import javafx.scene.Group;
 import javafx.scene.Scene;
-import javafx.scene.control.ColorPicker;
+import javafx.scene.control.TextArea;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
-
-import java.awt.*;
+import javafx.scene.control.Button;
 
 public class Customization {
 
@@ -36,30 +34,52 @@ public class Customization {
         txtBox.setFont(Font.font(fontSize));
     }
 
-    public void ColorPick() {
-        //vbox on ns. pohjakomponentti, jonka päälle voidaan lisätä muita komponentteja.
-       //Button blueBtn = new Button("blue");
-        VBox vb = new VBox();
-
-
-        //luodaan oma ikkuna color pickerille.
-        Group root = new Group(vb);
-
-        vb.getChildren().add(new javafx.scene.control.Button("blue"));
-
-
-        Scene scene = new Scene(root,300,300);
+    public void ColorPick(TextArea txtBox) {
         Stage stage = new Stage();
-        stage.setTitle("Color Picker");
+
+        Button greenBtn = new Button("green");
+        Button redBtn = new Button("red");
+        greenBtn.setOnAction(e->{
+            String colorValue=greenBtn.getText();
+            String style = STR."-fx-text-fill:\{colorValue};";
+            txtBox.setStyle(style);
+        });
+        redBtn.setOnAction(e->{
+            String colorValue=redBtn.getText();
+            String style = STR."-fx-text-fill:\{colorValue};";
+            txtBox.setStyle(style);
+        });
+
+        VBox vb = new VBox();
+        vb.getChildren().addAll(greenBtn,redBtn);
+        Scene scene = new Scene(vb, 300, 300);
+
+        // set the scene
         stage.setScene(scene);
+
         stage.show();
 
 
     }
 
-    public void DoChangeToBlue(javafx.scene.control.TextArea txtBox) {
-        String style = "-fx-control-inner-background:blue;";
+    public void DoChangeBg(TextArea txtBox, String colorValue) {
+        System.out.println(colorValue);
+        String style = "-fx-text-fill:green;";
         txtBox.setStyle(style);
+
+    }
+
+    public void DoChangeToBlue(javafx.scene.control.TextArea txtBox) {
+        String style = "-fx-text-background:blue;";
+        txtBox.setStyle(style);
+        //String style = "-fx-text-fill:green;";
+    }
+
+    public void DoBolding(javafx.scene.control.TextArea txtBox) {
+        Font currentFont = Font.font((Font.font(txtBox.getFont().getSize())).getStyle());
+       // currentfontin ansioista fontti ja koko oysyvät samana, ainoastaan fontweight vaihtuu
+        txtBox.setFont(Font.font(String.valueOf(currentFont), FontWeight.BOLD, currentFont.getSize()));
+
     }
 
 }

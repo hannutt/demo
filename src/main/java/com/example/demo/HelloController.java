@@ -1,5 +1,6 @@
 package com.example.demo;
 
+
 import com.sun.management.OperatingSystemMXBean;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -8,6 +9,10 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.MenuItem;
+import javafx.scene.control.TextArea;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
@@ -17,11 +22,16 @@ import javafx.scene.text.Font;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
+import java.awt.*;
 import java.io.*;
 import java.lang.management.ManagementFactory;
+import java.lang.management.RuntimeMXBean;
 import java.util.*;
 
 import java.net.InetAddress;
+import java.util.List;
+
+
 
 public class HelloController {
     HelloApplication n = new HelloApplication();
@@ -29,9 +39,7 @@ public class HelloController {
 
     Customization c = new Customization();
 
-
-
-
+    Network net = new Network();
     Dir dir = new Dir();
 
     OpenFiles openFile = new OpenFiles();
@@ -58,7 +66,7 @@ public class HelloController {
     public Button memBtn;
 
     @FXML
-    public Label hiddenLbl,UItip;
+    public Label hiddenLbl,UItip,fwstatus;
 
     @FXML
     public TextField pidTxt;
@@ -66,7 +74,7 @@ public class HelloController {
     public TextField urlField;
 
     @FXML
-    public CheckBox pingUrl;
+    public CheckBox pingUrl,wView;
 
     @FXML
     public Button closeBtn;
@@ -101,11 +109,14 @@ public class HelloController {
         return this.HDserial;
     }
 
+    Timer timer = new Timer();
+
+
 
 
     //INITIALIZE METODI SUORITETAAN HETI OHJELMAN KÄYNNISTYESSÄ TÄSSÄ TAPAUKSESSA
     //SE KUTSUU SHOWUSER METODIA, JOKA TOTEUTETAAN HETI.
-    public void initialize() {
+    public void initialize() throws IOException {
 
 
 
@@ -124,8 +135,17 @@ public class HelloController {
         }));
 
         showUser();
+        firewStatus();
+        getBootupTime();
 
 
+    }
+
+
+
+    public void textAnimation() {
+        titleLbl.setStyle("-fx-text-fill:red;");
+        titleLbl.setFont(Font.font("System", 20));
 
     }
 
@@ -158,11 +178,48 @@ public class HelloController {
 
 
     }
+    public void firewStatus() throws IOException {
+        Process status = Runtime.getRuntime().exec("netsh advfirewall show currentprofile");
+        status.getOutputStream().close();
+        BufferedReader fwstatus = new BufferedReader(new InputStreamReader(status.getInputStream()));
+        String line;
+        line = fwstatus.readLine();
 
+        while ((line = fwstatus.readLine()) != null) {
+            System.out.println(line);
+            if (line.contains("Ok."))
+            {
+                setFwstatus();
+
+            }
+
+
+        }
+
+    }
+
+    public void getBootupTime() throws IOException {
+        Process p = Runtime.getRuntime().exec("wmic os get lastbootuptime");
+        BufferedReader r = new BufferedReader(new InputStreamReader(p.getInputStream()));
+        String line;
+        line = r.readLine();
+
+        while ((line = r.readLine()) != null) {
+            System.out.println(line);
+
+        }
+
+
+    }
+
+    public void setFwstatus() {
+        fwstatus.setText("Firewall OK");
+
+    }
     @FXML
     protected void showMemory() {
         pidTxt.setVisible(false);
-        closeBtn.setVisible(false);
+        //closeBtn.setVisible(false);
 
         double memorySize = ((OperatingSystemMXBean) ManagementFactory.getOperatingSystemMXBean()).getTotalMemorySize() / (1024.0 * 1024 * 1024);
         //pyöristys 2 desimaalin tarkkuuteen.
@@ -405,36 +462,18 @@ public class HelloController {
     }
 
 
+
     public void NetWork(ActionEvent actionEvent) throws IOException, InterruptedException {
 
-        pidTxt.setVisible(true);
-        pingUrl.setVisible(true);
-        String con = "";
-        Process process = java.lang.Runtime.getRuntime().exec("ping www.google.com");
-        int status = process.waitFor();
-        if (status == 0) {
-            con = "Online";
+        net.ShowNetworkInfo(pidTxt,pingUrl,txtBox,processID);
 
-        } else {
-            con = "Offline";
-        }
-        txtBox.setText("IP-address: " + InetAddress.getLocalHost().getHostAddress() + "\n" +
-                "Hostname: " + InetAddress.getLocalHost().getHostName() + "\n" + "Internet connection: " + con
-        );
+
+
     }
 
     public void checkUrl(ActionEvent actionEvent) throws IOException, InterruptedException {
-        if (pingUrl.isSelected()) {
-            String urlStr = pidTxt.getText();
-            Process process = java.lang.Runtime.getRuntime().exec("ping " + urlStr);
-            int status = process.waitFor();
-            if (status == 0) {
-                txtBox.setText(urlStr + "OK");
-            } else {
-                txtBox.setText(urlStr + "Error, can't reach");
-            }
+        net.DoPing(txtBox,pingUrl,pidTxt,wView);
 
-        }
 
 
     }
@@ -556,13 +595,6 @@ public class HelloController {
                 functionsGP.setOpacity(1.0);
                 UItip.setOpacity(0.0);
 
-
-
-
-
-
-
-
             }
         });
     }
@@ -581,12 +613,31 @@ public class HelloController {
     }
 
     public void colChoose(ActionEvent actionEvent) {
-        c.ColorPick();
+        c.ColorPick(txtBox);
     }
 
     public void changeBlue(ActionEvent actionEvent) {
         c.DoChangeToBlue(txtBox);
 
 
+    }
+
+    public void hiddenFileSearch(ActionEvent actionEvent) throws IOException {
+        String path = dirInput.getText();
+        dir.DoHiddenFileSearch(path,txtBox);
+    }
+
+    public void BoldText(ActionEvent actionEvent) {
+        c.DoBolding(txtBox);
+    }
+
+
+
+    public void showWview(ActionEvent actionEvent) {
+        net.DoWebView(pidTxt);
+    }
+
+    public void findFile(ActionEvent actionEvent) {
+        dir.DoSearch(dirInput);
     }
 }
