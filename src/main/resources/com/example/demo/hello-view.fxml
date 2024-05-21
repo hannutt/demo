@@ -129,6 +129,7 @@
                <MenuItem fx:id="subdirs" mnemonicParsing="false" onAction="#SubDir" text="Show sub-dir only" />
                <MenuItem fx:id="bySize" mnemonicParsing="false" onAction="#sizeDir" text="Order by size" />
                <MenuItem fx:id="hiddenSearch" mnemonicParsing="false" onAction="#hiddenFileSearch" text="Search hidden files" />
+               <MenuItem fx:id="dragDrop" mnemonicParsing="false" onAction="#ListSubDirs" text="Click &amp; Drop" />
            </items>
          </MenuButton>
          <Button fx:id="hideBtn" mnemonicParsing="false" onAction="#hideGP" prefHeight="25.0" prefWidth="63.0" text="Hide" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="2" />

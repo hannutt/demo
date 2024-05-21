@@ -50,6 +50,10 @@ subfolders, or searching for files by file type.
 For example, select the Advanced dir option from the menu, enter a file extension and press TAB,
 and the program will search for files with the extension you entered.
 
+Click and drop feature. you can select this option from the advanced dir menu. 
+The program searches for folders on the C-drive and displays the found folders. 
+Click on one of the results and the program will automatically display the contents of the folder.
+
 
 
 QUICK OPENER

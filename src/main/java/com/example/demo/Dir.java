@@ -1,15 +1,25 @@
 package com.example.demo;
 
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.scene.Scene;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class Dir {
@@ -36,6 +46,53 @@ public class Dir {
 
     public String getPath() {
         return this.PathName;
+    }
+
+    public void ClickNdrop(TextField dirInput) throws IOException {
+        Stage stage = new Stage();
+        VBox vb = new VBox();
+        Label title = new Label("CLICK & DROP");
+
+        Path dir = Paths.get("c:\\");
+        String dirStr = String.valueOf(dir);
+        vb.getChildren().add(title);
+
+        //maxdepthin avulla määritetäänt kuinka monta alikansiota näytetään haussa, 1=ensimmäiset kansiot
+        List<String> dirs=new ArrayList<>();
+        Files.walk(dir, 1)
+                .filter(p -> Files.isDirectory(p) && ! p.equals(dir))
+                .forEach(p -> dirs.add(String.valueOf(p.getFileName())));
+        int listSize = dirs.size();
+        for (int i =0;i<listSize;i++) {
+
+            //luodaan label komponentteja for-silmukassa yhtä monta kuin dirs-listassa on
+            //alkioita. for-silmukkaa käytetään kun tiedetään tarkasti montako kierrosta tarvitaan.
+            Label pathLbl = new Label();
+
+            //tapahtumakäsittelijä hiiren painallukselle eli siirretään klikatun labelin teksti
+            //dirinput kenttään
+            EventHandler<MouseEvent> PathClick = new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent mouseEvent) {
+                    String p = pathLbl.getText();
+                    dirInput.setText(p);
+
+                }
+
+            };
+            pathLbl.setText(String.valueOf(dirStr  + dirs.get(i)));
+            vb.getChildren().add(pathLbl);
+            pathLbl.setOnMousePressed(PathClick);
+        }
+
+
+        Scene scene = new Scene(vb, 300, 300);
+
+        // set the scene
+        stage.setScene(scene);
+
+        stage.show();
+
     }
 
     public void DoSearch(TextField dirInput) {

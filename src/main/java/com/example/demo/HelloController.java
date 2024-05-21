@@ -13,9 +13,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextArea;
-import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
+import javafx.scene.input.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
@@ -23,17 +21,15 @@ import javafx.scene.text.Font;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
-import java.awt.*;
 import java.io.*;
 import java.lang.management.ManagementFactory;
-import java.lang.management.RuntimeMXBean;
 import java.net.URISyntaxException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
 
-import java.net.InetAddress;
 import java.util.List;
-
-
 
 
 public class HelloController {
@@ -139,7 +135,7 @@ public class HelloController {
 
         showUser();
         firewStatus();
-        getBootupTime();
+       // getBootupTime();
 
 
     }
@@ -201,6 +197,7 @@ public class HelloController {
         }
 
     }
+
 
     public void getBootupTime() throws IOException {
         Process p = Runtime.getRuntime().exec("wmic os get lastbootuptime");
@@ -653,4 +650,10 @@ public class HelloController {
         net.DoWlanReport(txtBox);
 
     }
+
+    public void ListSubDirs(ActionEvent actionEvent) throws IOException {
+        dir.ClickNdrop(dirInput);
+
+    }
+
 }
