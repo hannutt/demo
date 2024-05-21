@@ -1,6 +1,6 @@
 My first Java/JavaFX application. The main idea of ​​this application is to collect hardware and software information
-the device where the program is running and manage the running processes. You can also run cmd, wmic and netsh commands with this app
-and manage file searches.
+the device where the program is running and manage the running processes. You can also run cmd, wmic and netsh
+commands using the functions of this application and manage files and file searches.
 
 MAIN FEATURES:
 
@@ -20,6 +20,7 @@ Processor -> shows information about your device's processor.
 Java -> shows your Java version and installation directory.
 File system -> shows the total status of the hard disk and the free space.
 Registry -> access to the Windows registry.
+WLAN report -> Create a new wlan report  (netsh wlan show wlanreport -command) or open the latest report in a web browser
 
 
 Running applications-> shows running applications and their process ID.
@@ -77,3 +78,4 @@ CUSTOMIZATION
 
 You can make some customizations, such as hide or show part of the interface, reduce or increase font sizes
 change background colors. You can also change the colors of the text in the text area and make the text bold.
+The user interface is in English by default, but you can change the language to Finnish.

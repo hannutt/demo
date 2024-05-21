@@ -36,7 +36,7 @@
          </ContextMenu>
       </contextMenu>
    </Label>
-   <MenuBar fx:id="menubar" maxHeight="30.0" maxWidth="557.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="30.0" prefWidth="557.0" style="-fx-background-color: #a1cfbf; -fx-font-size: 14;">
+   <MenuBar fx:id="menubar" maxHeight="30.0" maxWidth="627.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="30.0" prefWidth="627.0" style="-fx-background-color: #a1cfbf; -fx-font-size: 14;">
      <menus>
        <Menu fx:id="open" mnemonicParsing="false" text="Quick open">
          <items>
@@ -50,6 +50,11 @@
                <MenuItem mnemonicParsing="false" onAction="#OpenFile" text="Open" />
             </items>
          </Menu>
+       <Menu fx:id="Fc" mnemonicParsing="false" text="Select the app. to open">
+         <items>
+           <MenuItem mnemonicParsing="false" onAction="#startFc" text="Explore" />
+         </items>
+       </Menu>
          <Menu mnemonicParsing="false" text="Customization">
            <items>
              <MenuItem mnemonicParsing="false" onAction="#increaseFont" text="Font size +" />
@@ -59,11 +64,18 @@
                <MenuItem mnemonicParsing="false" onAction="#BoldText" text="Bold text" />
            </items>
          </Menu>
-       <Menu fx:id="Fc" mnemonicParsing="false" text="Select the app. to open">
-         <items>
-           <MenuItem mnemonicParsing="false" onAction="#startFc" text="Explore" />
-         </items>
-       </Menu>
+         <Menu mnemonicParsing="false" text="Language op.">
+           <items>
+             <MenuItem mnemonicParsing="false" onAction="#UiToFIn" text="Change the UI language to Finnish">
+                  <graphic>
+                     <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                        <image>
+                           <Image url="@../../../img/finFlag.png" />
+                        </image>
+                     </ImageView>
+                  </graphic></MenuItem>
+           </items>
+         </Menu>
      </menus>
       <effect>
          <DropShadow />
@@ -99,12 +111,13 @@
                   <MenuItem fx:id="running" mnemonicParsing="false" onAction="#showRunningApps" text="Running Apps" />
                <MenuItem fx:id="network" mnemonicParsing="false" onAction="#NetWork" text="Network" />
                <MenuItem fx:id="registry" mnemonicParsing="false" onAction="#winReg" text="Registry" />
+               <MenuItem mnemonicParsing="false" onAction="#wlanReport" text="WLAN report" />
               </items>
           </MenuButton>
           <Button fx:id="graphBtn" mnemonicParsing="false" onAction="#openGraph" text="Graphics" GridPane.columnIndex="1" GridPane.halignment="RIGHT" />
          <TextField fx:id="dirInput" maxWidth="200.0" prefHeight="25.0" prefWidth="182.0" GridPane.rowIndex="1" />
          <Button fx:id="dirBtn" mnemonicParsing="false" onAction="#excecuteDIr" prefHeight="25.0" prefWidth="62.0" text="Dir" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="1" />
-         <MenuButton mnemonicParsing="false" text="Advanced dir" GridPane.rowIndex="2">
+         <MenuButton fx:id="advDir" mnemonicParsing="false" text="Advanced dir" GridPane.rowIndex="2">
            <items>
                <MenuItem fx:id="dirB" mnemonicParsing="false" onAction="#BareDir" text="Bare format" />
              <MenuItem mnemonicParsing="false" onAction="#txtFileSrc" text="Search .*txt" />
@@ -125,7 +138,7 @@
    <Label fx:id="UItip" opacity="0.0" prefHeight="17.0" prefWidth="140.0" text="PRESS S TO UNHIDE UI" />
    <ImageView fx:id="tools" fitHeight="99.0" fitWidth="149.0" pickOnBounds="true" preserveRatio="true">
       <image>
-         <Image url="@../../../../../../../../../../Users/Omistaja/Desktop/tools.jpg" />
+         <Image url="@../../../img/tools.jpg" />
       </image>
    </ImageView>
    <GridPane maxWidth="250.0" prefWidth="250.0">

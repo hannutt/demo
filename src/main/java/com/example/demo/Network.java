@@ -12,9 +12,9 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.InetAddress;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.*;
 
 public class Network {
 
@@ -26,6 +26,29 @@ public class Network {
     @FXML
     public TextArea txtBox;
 
+
+    public void DoWlanReport(TextArea txtBox) throws URISyntaxException, IOException, InterruptedException {
+        ChoiceDialog<String> cd = new ChoiceDialog<>("Show latest report","Create new report");
+        cd.showAndWait();
+        String sel = cd.getSelectedItem();
+        if (Objects.equals(sel, "Show latest report"))
+        {
+            //näytetään selaimessa wlan raportti
+            java.awt.Desktop.getDesktop().browse(new URI("file:///C:/ProgramData/Microsoft/Windows/WlanReport/wlan-report-latest.html"));
+        }
+        else if (Objects.equals(sel,"Create new report"));
+        {
+            createWlanReport(txtBox);
+        }
+    }
+
+    public void createWlanReport(TextArea txtBox) throws IOException, InterruptedException {
+        Process p = Runtime.getRuntime().exec("netsh wlan show wlanreport");
+        new Thread(p::getInputStream).start();
+        p.waitFor();
+        txtBox.appendText("report created in C:\\ProgramData\\Microsoft\\Windows\\WlanReport");
+
+    }
     public void ShowNetworkInfo(TextField pidTxt, CheckBox pingUrl, TextArea txtBox, MenuButton processID) throws IOException, InterruptedException {
         pidTxt.setVisible(true);
         pingUrl.setVisible(true);
@@ -41,7 +64,7 @@ public class Network {
         }
 
         txtBox.setText("IP-address: " + InetAddress.getLocalHost().getHostAddress() + "\n" +
-                "Hostname: " + InetAddress.getLocalHost().getHostName() + "\n" + "Internet connection: " + con);
+                "Hostname: " + InetAddress.getLocalHost().getHostName() + "\n" + "Internet connection: " + con+"\n");
         Process netshcom = Runtime.getRuntime().exec("netsh wlan show profile");
         List<String> wlans = new ArrayList<String>();
         new Thread(() -> {

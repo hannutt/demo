@@ -2,6 +2,7 @@ package com.example.demo;
 
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
+import javafx.scene.control.MenuButton;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
@@ -13,6 +14,16 @@ public class Customization {
 
     @FXML
     public TextArea txtBox;
+
+    public void LngToFin(Button graphBtn, Button dirBtn, MenuButton select, Button hideBtn, MenuButton advDir, Button findBtn) {
+        graphBtn.setText("Grafiikka");
+        select.setText("Valitse");
+        hideBtn.setText("Piilota");
+        dirBtn.setText("Kansiot");
+        findBtn.setText("Etsi");
+        advDir.setText("keh. haku");
+
+    }
 
     public void DoFontIncrease(javafx.scene.control.TextArea txtBox)
     {

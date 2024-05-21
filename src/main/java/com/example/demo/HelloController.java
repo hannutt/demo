@@ -13,6 +13,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextArea;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
@@ -26,10 +27,12 @@ import java.awt.*;
 import java.io.*;
 import java.lang.management.ManagementFactory;
 import java.lang.management.RuntimeMXBean;
+import java.net.URISyntaxException;
 import java.util.*;
 
 import java.net.InetAddress;
 import java.util.List;
+
 
 
 
@@ -38,6 +41,7 @@ public class HelloController {
     OpenApps openApp = new OpenApps();
 
     Customization c = new Customization();
+
 
     Network net = new Network();
     Dir dir = new Dir();
@@ -56,10 +60,10 @@ public class HelloController {
     public TextArea txtBox;
 
     @FXML
-    public Button graphBtn;
+    public Button graphBtn,findBtn,dirBtn,hideBtn;
 
     @FXML
-    public MenuButton processID;
+    public MenuButton processID,select,advDir;
     @FXML
     public VBox mainV;
     @FXML
@@ -83,7 +87,7 @@ public class HelloController {
     @FXML
     public MenuButton pids;
     @FXML
-    public Button noteBtn;
+    public Button noteBtn,fin;
 
     @FXML
     public MenuItem openNote, openChrome, openPaint;
@@ -114,12 +118,11 @@ public class HelloController {
 
 
 
+
+
     //INITIALIZE METODI SUORITETAAN HETI OHJELMAN KÄYNNISTYESSÄ TÄSSÄ TAPAUKSESSA
     //SE KUTSUU SHOWUSER METODIA, JOKA TOTEUTETAAN HETI.
     public void initialize() throws IOException {
-
-
-
 
 
         //openApp on OpenApps luokan olio ja tässä olion avulla käytetäänn
@@ -144,6 +147,7 @@ public class HelloController {
 
 
     public void textAnimation() {
+
         titleLbl.setStyle("-fx-text-fill:red;");
         titleLbl.setFont(Font.font("System", 20));
 
@@ -236,7 +240,7 @@ public class HelloController {
     //system.getenv saa parametrina ympäristömuuttujan
     public void processor() throws IOException {
         pidTxt.setVisible(false);
-        closeBtn.setVisible(false);
+        //closeBtn.setVisible(false);
 
         double cpuLoad = ((OperatingSystemMXBean) ManagementFactory.getOperatingSystemMXBean()).getProcessCpuLoad();
 
@@ -267,7 +271,7 @@ public class HelloController {
 
     public void showUser() {
         java.lang.String userName = System.getProperty("user.name");
-        user.setText("Cur. Windows username: " + userName);
+        user.setText("Logged user: " + userName);
 
     }
 
@@ -639,5 +643,14 @@ public class HelloController {
 
     public void findFile(ActionEvent actionEvent) {
         dir.DoSearch(dirInput);
+    }
+
+    public void UiToFIn(ActionEvent actionEvent) {
+        c.LngToFin(graphBtn,dirBtn,select,hideBtn,advDir,findBtn);
+    }
+
+    public void wlanReport(ActionEvent actionEvent) throws URISyntaxException, IOException, InterruptedException {
+        net.DoWlanReport(txtBox);
+
     }
 }
