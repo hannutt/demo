@@ -1,6 +1,6 @@
 My first Java/JavaFX application. The main idea of ​​this application is to collect hardware and software information
 the device where the program is running and manage the running processes. You can also run cmd, wmic and netsh
-commands using the functions of this application and manage files and file searches.
+commands using the functions of this application and manage files, applications and file searches.
 
 MAIN FEATURES:
 
@@ -77,7 +77,7 @@ With the Graphics option, you can draw graphical pie charts of your ram memory a
 you can also save the pie charts to your device in png format by clicking the save button.
 Graphic charts are made with the javafx.scene.chart library.
 On the hard disk option program searches all the hard disks of your device and finally asks you to select the hard disk whose data you want to see in the pie chart.
-
+The memory and hard disk values ​​can also be saved in the MySQL database with a mouse click.
 CUSTOMIZATION
 
 You can make some customizations, such as hide or show part of the interface, reduce or increase font sizes

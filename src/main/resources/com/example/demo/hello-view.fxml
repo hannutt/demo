@@ -90,10 +90,11 @@
             <Font name="HP Simplified Light" size="18.0" />
         </font>
    </Label>
-   <GridPane fx:id="functionsGP" maxWidth="289.0" prefHeight="131.0" prefWidth="289.0" style="-fx-background-color: #aac1e6; -fx-border-radius: 15;">
+   <GridPane fx:id="functionsGP" maxWidth="388.0" prefHeight="131.0" prefWidth="388.0" style="-fx-background-color: #aac1e6; -fx-border-radius: 15;">
      <columnConstraints>
        <ColumnConstraints hgrow="SOMETIMES" maxWidth="165.0" minWidth="10.0" prefWidth="113.0" />
        <ColumnConstraints hgrow="SOMETIMES" maxWidth="107.0" minWidth="10.0" prefWidth="107.0" />
+         <ColumnConstraints hgrow="SOMETIMES" maxWidth="107.0" minWidth="10.0" prefWidth="107.0" />
      </columnConstraints>
      <rowConstraints>
        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
@@ -114,9 +115,9 @@
                <MenuItem mnemonicParsing="false" onAction="#wlanReport" text="WLAN report" />
               </items>
           </MenuButton>
-          <Button fx:id="graphBtn" mnemonicParsing="false" onAction="#openGraph" text="Graphics" GridPane.columnIndex="1" GridPane.halignment="RIGHT" />
+          <Button fx:id="graphBtn" mnemonicParsing="false" onAction="#openGraph" text="Graphics" GridPane.columnIndex="2" GridPane.halignment="RIGHT" />
          <TextField fx:id="dirInput" maxWidth="200.0" prefHeight="25.0" prefWidth="182.0" GridPane.rowIndex="1" />
-         <Button fx:id="dirBtn" mnemonicParsing="false" onAction="#excecuteDIr" prefHeight="25.0" prefWidth="62.0" text="Dir" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="1" />
+         <Button fx:id="dirBtn" mnemonicParsing="false" onAction="#excecuteDIr" prefHeight="25.0" prefWidth="62.0" text="Dir" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="1" />
          <MenuButton fx:id="advDir" mnemonicParsing="false" text="Advanced dir" GridPane.rowIndex="2">
            <items>
                <MenuItem fx:id="dirB" mnemonicParsing="false" onAction="#BareDir" text="Bare format" />
@@ -126,18 +127,19 @@
                      <TextField fx:id="extField" onKeyPressed="#srcOwnKeyPressed" />
                   </graphic>
                </MenuItem>
-               <MenuItem fx:id="subdirs" mnemonicParsing="false" onAction="#SubDir" text="Show sub-dir only" />
+               <MenuItem fx:id="subdirs" mnemonicParsing="false" onAction="#SubDir" text="Show dirs only" />
                <MenuItem fx:id="bySize" mnemonicParsing="false" onAction="#sizeDir" text="Order by size" />
                <MenuItem fx:id="hiddenSearch" mnemonicParsing="false" onAction="#hiddenFileSearch" text="Search hidden files" />
                <MenuItem fx:id="dragDrop" mnemonicParsing="false" onAction="#ListSubDirs" text="Click &amp; Drop" />
+               <MenuItem fx:id="emptyItem" mnemonicParsing="false" onAction="#listEmptyDirs" text="Check is folder empty" />
            </items>
          </MenuButton>
-         <Button fx:id="hideBtn" mnemonicParsing="false" onAction="#hideGP" prefHeight="25.0" prefWidth="63.0" text="Hide" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="2" />
-         <Button fx:id="findBtn" mnemonicParsing="false" onAction="#findFile" text="Find" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="1" />
+         <Button fx:id="hideBtn" mnemonicParsing="false" onAction="#hideGP" prefHeight="25.0" prefWidth="63.0" text="Hide" GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.rowIndex="2" />
+         <Button fx:id="findBtn" mnemonicParsing="false" onAction="#findFile" prefHeight="25.0" prefWidth="96.0" text="Find" GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.rowIndex="1" />
       </children>
    </GridPane>
    <Label fx:id="UItip" opacity="0.0" prefHeight="17.0" prefWidth="140.0" text="PRESS S TO UNHIDE UI" />
-   <ImageView fx:id="tools" fitHeight="99.0" fitWidth="149.0" pickOnBounds="true" preserveRatio="true">
+   <ImageView fx:id="tools" fitHeight="79.0" fitWidth="124.0" pickOnBounds="true" preserveRatio="true">
       <image>
          <Image url="@../../../img/tools.jpg" />
       </image>
@@ -150,15 +152,14 @@
      <rowConstraints>
        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
      </rowConstraints>
       <children>
       
-                                                                                                         <TextField fx:id="pidTxt" maxWidth="150.0" visible="false" GridPane.halignment="LEFT" GridPane.rowIndex="1" />
-         <CheckBox fx:id="pingUrl" mnemonicParsing="false" onAction="#checkUrl" text="Ping url" visible="false" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-         <MenuButton fx:id="processID" mnemonicParsing="false" text="Close process" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-         <CheckBox fx:id="wView" mnemonicParsing="false" onAction="#showWview" text="WebView" visible="false" GridPane.rowIndex="3" />
+                                                                                                         <TextField fx:id="pidTxt" maxWidth="150.0" visible="false" GridPane.halignment="LEFT" />
+         <CheckBox fx:id="pingUrl" mnemonicParsing="false" onAction="#checkUrl" text="Ping url" visible="false" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+         <MenuButton fx:id="processID" mnemonicParsing="false" text="Close process" GridPane.columnIndex="1" />
+         <CheckBox fx:id="wView" mnemonicParsing="false" onAction="#showWview" text="WebView" visible="false" GridPane.rowIndex="2" />
       </children>
    </GridPane>
     <TextArea fx:id="txtBox" maxHeight="170.0" maxWidth="472.0" minHeight="-Infinity" prefHeight="169.0" prefWidth="472.0" style="-fx-background-color: blue; -fx-border-radius: 50; -fx-border-w: 15; -fx-text-inner-color: blue;">

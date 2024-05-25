@@ -14,6 +14,8 @@ module com.example.demo {
     requires javafx.swing;
     requires java.prefs;
     requires org.apache.commons.io;
+    requires java.sql;
+    requires mysql.connector.j;
 
     opens com.example.demo to javafx.fxml;
     exports com.example.demo;

@@ -18,16 +18,21 @@ import javax.imageio.ImageIO;
 import java.io.File;
 import java.io.IOException;
 import java.lang.management.ManagementFactory;
-import java.text.DecimalFormat;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
+import java.util.Calendar;
 
 public class Graphics {
 
     public LocalDateTime timenow = LocalDateTime.now();
     public DateTimeFormatter timenowFormatted = DateTimeFormatter.ofPattern("dd.MM.yyyy");
 
+
+    java.sql.Date sqldate = new java.sql.Date(Calendar.getInstance().getTime().getTime());
     public String timeStr = timenow.format(timenowFormatted);
 
     public long free;
@@ -101,19 +106,21 @@ public class Graphics {
          //talletetaan muuttujaan getterin tulos muutettuna gigatavuiksi
          double freesize = getFree() / (1024.0 * 1024 * 1024);
          double totalsize = getTotal() / (1024.0*1024*1024);
+         double usedSize = getUsed() / (1024.0*1024*1024);
          //muunnetaan merkkijonoksi
          String freeTxt = String.valueOf(freesize);
          //tuloksen pyöristys 2 desimaaliin
          freeTxt= String.format("%.2f",freesize);
          String totalTxt = String.valueOf(totalsize);
          totalTxt = String.format("%.2f",totalsize);
+         String usedTxt = String.format("%.2f",usedSize);
 
 
         ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList(
                 //getfree ja gettotal metodeilla voidaan asettaa arvot piecharttiin
                 new PieChart.Data(STR."Free \{freeTxt}",getFree()),
-                new PieChart.Data(STR."Total \{totalTxt}",getTotal())
-                //new PieChart.Data("Used ",getUsed())
+                new PieChart.Data(STR."Total \{totalTxt}",getTotal()),
+                new PieChart.Data(STR."Used \{usedTxt}",getUsed())
         );
         PieChart pieChart = new PieChart(pieChartData);
         Group root = new Group(pieChart);
@@ -123,14 +130,26 @@ public class Graphics {
         stage.setScene(scene);
         stage.show();
         Button saveBtn = new Button();
-        saveBtn.setText("Save");
+        saveBtn.setText("Save as png");
+        Button savesqlBtn = new Button();
+        savesqlBtn.setText("Save to SQL");
+        savesqlBtn.setLayoutX(20);
+        savesqlBtn.setLayoutY(40);
         Label timeLbl = new Label();
         timeLbl.setText(timeStr);
         timeLbl.setLayoutX(200);
         timeLbl.setLayoutY(95);
         //lisätään komponentit root-komponenttiin
-        root.getChildren().add(saveBtn);
+        root.getChildren().addAll(saveBtn,savesqlBtn);
         root.getChildren().add(timeLbl);
+        savesqlBtn.setOnAction(e->{
+            try {
+                memValToDB(freesize,usedSize,totalsize);
+
+            } catch (SQLException ex) {
+                throw new RuntimeException(ex);
+            }
+        });
 
 
         //dynaamisesti luodussa ikkunnassa buttonille asetetaan
@@ -143,6 +162,27 @@ public class Graphics {
                 throw new RuntimeException(ex);
             }
         });
+
+
+
+
+    }
+
+    public void memValToDB(double freesize, double usedSize, double totalsize) throws SQLException {
+        //double fz = DoMemoryPie();
+
+        DBconnection conn = new DBconnection();
+        Connection connDB = conn.getConnection();
+        String DBquery = "INSERT INTO memoryvalues (dateval,free,used,total) VALUES (?,?,?,?)";
+        PreparedStatement pst = connDB.prepareStatement(DBquery);
+        pst.setDate(1,sqldate);
+
+        pst.setDouble(2,freesize);
+        pst.setDouble(3,usedSize);
+        pst.setDouble(4,totalsize);
+
+        int rs = pst.executeUpdate();
+        System.out.println(rs);
 
 
 
@@ -164,10 +204,14 @@ public class Graphics {
             File file = new File(userPath);
             long freeSize = file.getFreeSpace() / (1024 * 1024 * 1024);
             long totalSize = file.getTotalSpace() / (1024*1024*1024);
+            long usedSize = file.getTotalSpace() / (1024 * 1024 * 1024) - file.getFreeSpace() / (1024 * 1024 * 1024);
+
             setFree(freeSize);
             setTotal(totalSize);
+            setUsed(usedSize);
             String FreeSizeTxt = String.valueOf(freeSize);
             String TotalSizeTxt = String.valueOf(totalSize);
+            String usedSizeTxt = String.valueOf(usedSize);
             //setter metodilla talletetaan arvot
 
 
@@ -175,7 +219,8 @@ public class Graphics {
             ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList(
                     //getfree ja gettotal metodeilla voidaan asettaa arvot piecharttiin
                     new PieChart.Data("Free GB: "+FreeSizeTxt,getFree()),
-                    new PieChart.Data("Total GB "+TotalSizeTxt,getTotal())
+                    new PieChart.Data("Total GB "+TotalSizeTxt,getTotal()),
+                    new PieChart.Data("Used GB "+usedSizeTxt,getUsed())
             );
             PieChart pieChart = new PieChart(pieChartData);
             Label timeLbl = new Label();

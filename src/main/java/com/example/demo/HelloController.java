@@ -2,6 +2,8 @@ package com.example.demo;
 
 
 import com.sun.management.OperatingSystemMXBean;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -20,6 +22,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import org.controlsfx.control.textfield.TextFields;
 
 import java.io.*;
 import java.lang.management.ManagementFactory;
@@ -27,12 +30,20 @@ import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 import java.util.List;
 
 
 public class HelloController {
+
+
+    public LocalDateTime timenow = LocalDateTime.now();
+    public DateTimeFormatter timenowFormatted = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+
+    public String timeToStr;
     HelloApplication n = new HelloApplication();
     OpenApps openApp = new OpenApps();
 
@@ -91,6 +102,7 @@ public class HelloController {
     @FXML
     public TextField dirInput, extField;
 
+
     @FXML
     public GridPane functionsGP;
 
@@ -118,7 +130,18 @@ public class HelloController {
 
     //INITIALIZE METODI SUORITETAAN HETI OHJELMAN KÄYNNISTYESSÄ TÄSSÄ TAPAUKSESSA
     //SE KUTSUU SHOWUSER METODIA, JOKA TOTEUTETAAN HETI.
+
     public void initialize() throws IOException {
+
+
+        //dirinput tekstikentässä on "kuuntelija", joka kopioi
+        //kenttää kirjoitetun tekstin findBtn painikkeeseen.
+
+        dirInput.textProperty().addListener((obs, oldText, newText) -> {
+            String userPath = dirInput.getText();
+            // do what you need with newText here, e.g.
+            findBtn.setText("searh from "+userPath);
+        });
 
 
         //openApp on OpenApps luokan olio ja tässä olion avulla käytetäänn
@@ -219,6 +242,8 @@ public class HelloController {
     }
     @FXML
     protected void showMemory() {
+        timeToStr = timenow.format(timenowFormatted);
+
         pidTxt.setVisible(false);
         //closeBtn.setVisible(false);
 
@@ -228,7 +253,7 @@ public class HelloController {
         double freeMemory = ((OperatingSystemMXBean) ManagementFactory.getOperatingSystemMXBean()).getFreeMemorySize() / (1024.0 * 1024 * 1024);
         double roundedFree = Math.floor(freeMemory * 100) / 100.0;
         double usedMemory = roundedTotalMemory - roundedFree;
-        txtBox.setText("Total memory: " + roundedTotalMemory + " GB" + "\nFree: " + roundedFree + " GB" + "\n"
+        txtBox.setText(timeToStr+"\n"+ "Total memory: " + roundedTotalMemory + " GB" + "\nFree: " + roundedFree + " GB" + "\n"
                 + "memory in use: " + usedMemory + " GB");
     }
 
@@ -638,8 +663,9 @@ public class HelloController {
         net.DoWebView(pidTxt);
     }
 
-    public void findFile(ActionEvent actionEvent) {
-        dir.DoSearch(dirInput);
+    public void findFile(ActionEvent actionEvent) throws IOException {
+        String path = dirInput.getText();
+        dir.DoSearch(dirInput,txtBox,path);
     }
 
     public void UiToFIn(ActionEvent actionEvent) {
@@ -656,4 +682,9 @@ public class HelloController {
 
     }
 
+
+    public void listEmptyDirs(ActionEvent actionEvent) throws IOException {
+        String path = dirInput.getText();
+        dir.DoListOfEmptydirs(path,txtBox);
+    }
 }

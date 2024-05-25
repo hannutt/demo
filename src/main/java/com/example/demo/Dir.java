@@ -3,10 +3,7 @@ package com.example.demo;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -20,6 +17,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 
 public class Dir {
@@ -33,7 +31,7 @@ public class Dir {
     public TextField dirInput;
 
 
-
+    public String FinaFileName;
     @FXML
     public TextArea txtBox;
     public  String PathName;
@@ -44,10 +42,24 @@ public class Dir {
 
     }
 
+
     public String getPath() {
         return this.PathName;
     }
 
+
+    //tyhjien kansioiden selvitys
+    public void DoListOfEmptydirs(String path, TextArea txtBox) throws IOException {
+
+
+        File parentDir = new File(path);
+        if(parentDir.isDirectory() && parentDir.list().length == 0) {
+            txtBox.appendText("Directory "+ path + " is empty");
+        } else {
+            txtBox.appendText("Directory "+ path +  " is not empty");
+        }
+
+    }
     public void ClickNdrop(TextField dirInput) throws IOException {
         Stage stage = new Stage();
         VBox vb = new VBox();
@@ -76,6 +88,11 @@ public class Dir {
                 public void handle(MouseEvent mouseEvent) {
                     String p = pathLbl.getText();
                     dirInput.setText(p);
+                    //ikkunan minimointi
+                    stage.getScene().getWindow();
+                    stage.setIconified(true);
+
+
 
                 }
 
@@ -93,19 +110,46 @@ public class Dir {
 
         stage.show();
 
+
     }
 
-    public void DoSearch(TextField dirInput) {
-        String p = dirInput.getText();
-        String sep = "\\\\";
-        String[] myArray = p.split(sep);
-        for (String s : myArray) {
-            if (s.contains(".")) {
-                System.out.println(s);
-            }
+    public void DoSearch(TextField dirInput, TextArea txtBox, String path) throws IOException {
 
-
+        TextInputDialog td = new TextInputDialog();
+        td.setTitle("File search");
+        td.setContentText("Enter a file name: ");
+        Optional<String>res = td.showAndWait();
+        if (res.isPresent()) {
+            System.out.println(res.get());
+            FinaFileName = res.get();
         }
+
+        String fileName = "timenow.py";
+        String cmdArr[] = {"cmd","/c","dir",path};
+        Process p = Runtime.getRuntime().exec(cmdArr);
+        //Jos järjestelmäkomento tuottaa jonkin tuloksen, meidän on kaapattava tulos luomalla BufferedReader,
+        // joka kääri prosessista palautetun InputStreamin eli tulostetaan tulos luettavassa mudossa.
+        BufferedReader reader = new BufferedReader(new InputStreamReader(p.getInputStream()));
+        String line;
+        String fileType;
+
+        //tiedostotyypin selvitys
+
+
+        while ((line = reader.readLine()) != null) {
+            File fName = new File(line);
+            if (line.contains(FinaFileName))
+            {
+                txtBox.appendText(line+ " found.");
+
+            }
+        }
+
+
+        reader.close();
+
+
+
     }
     public void DoDirBySize(String path, TextArea txtBox, TextField dirInput) throws IOException {
 
@@ -162,6 +206,7 @@ public class Dir {
 
 
     public void DoStandardDir(String path, TextArea txtBox, TextField dirInput, CheckBox hiddenFiles, Label hiddenLbl) throws IOException {
+
         if (dirInput.getText().isEmpty()) {
             //textfieldin taustaväri muutos punaiseksi jos se on tyhjä.
              dirInput.setStyle("-fx-background-color: red;");
