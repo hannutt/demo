@@ -211,14 +211,9 @@ public class Dir {
             //textfieldin taustaväri muutos punaiseksi jos se on tyhjä.
              dirInput.setStyle("-fx-background-color: red;");
             //dirInput.setStyle("-fx-background-color: white;");
-
         }
 
-
-
         else {
-
-
             String cmdArr[] = {"cmd", "/c", "dir", path};
             String cmdHidden[] = {"cmd", "/c", "dir/a:h", path};
             Process p = Runtime.getRuntime().exec(cmdArr);

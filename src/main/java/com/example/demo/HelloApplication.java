@@ -10,22 +10,28 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.chart.PieChart;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextInputDialog;
+import javafx.scene.control.*;
 import javafx.scene.image.WritableImage;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextFlow;
 import javafx.stage.Stage;
 
 import javax.imageio.ImageIO;
 import java.io.File;
 import java.io.IOException;
 import java.lang.management.ManagementFactory;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.Statement;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Arrays;
 import javafx.embed.swing.SwingFXUtils;
 
 import java.sql.SQLException;
+import java.util.List;
 
 public class HelloApplication extends Application {
     @Override
@@ -42,6 +48,12 @@ public class HelloApplication extends Application {
     public long free=0;
     public  long total=0;
 
+    @FXML
+    public ListView DBvalues;
+
+    public TextField CompareInt;
+    @FXML
+    public Text row;
     public long used;
     public Button memBtn;
 
@@ -155,5 +167,51 @@ public class HelloApplication extends Application {
     }
 
 
+    public void readDB(ActionEvent actionEvent) {
+        try {
+            DBconnection conn = new DBconnection();
+            Connection connDB = conn.getConnection();
+            Statement stmt=connDB.createStatement();
+            ResultSet memoryData=stmt.executeQuery("select dateval,free,used,total FROM memoryvalues");
 
+
+            while(memoryData.next())
+                DBvalues.getItems().add(memoryData.getString(1)+" "+memoryData.getString(2)+" "+memoryData.getString(3) +" "+memoryData.getString(4));
+                //row.setText("Date: "+memoryData.getString(1)+ " Free "+memoryData.getString(2)+" Used "+memoryData.getString(3)+" Total "+memoryData.getString(4));
+            connDB.close();
+
+
+        }catch (SQLException e) {
+            System.out.println(e);
+
+        }
+
+    }
+
+    public void lvClick(MouseEvent mouseEvent) {
+
+        CompareInt.setText(DBvalues.getSelectionModel().getSelectedItems().toString());
+        System.out.println(DBvalues.getSelectionModel().getSelectedItems());
+    }
+
+    public void FreeMemOnly(ActionEvent actionEvent) {
+        try {
+            DBconnection conn = new DBconnection();
+            Connection connDB = conn.getConnection();
+            Statement stmt=connDB.createStatement();
+            ResultSet memoryData=stmt.executeQuery("select free FROM memoryvalues");
+
+
+            while(memoryData.next())
+                DBvalues.getItems().add(memoryData.getString(1));
+            //row.setText("Date: "+memoryData.getString(1)+ " Free "+memoryData.getString(2)+" Used "+memoryData.getString(3)+" Total "+memoryData.getString(4));
+            connDB.close();
+
+
+        }catch (SQLException e) {
+            System.out.println(e);
+
+        }
+
+    }
 }

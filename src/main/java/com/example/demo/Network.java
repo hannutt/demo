@@ -124,7 +124,7 @@ public class Network {
             while (sc.hasNextLine()) {
 
                 String wlantxt = sc.nextLine();
-                this.txtBox.appendText(wlantxt);
+                txtBox.appendText(wlantxt);
 
             }
 

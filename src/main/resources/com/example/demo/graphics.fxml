@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.SplitMenuButton?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
@@ -17,7 +20,11 @@
             <items>
                 <MenuItem fx:id="Dspace" mnemonicParsing="false" onAction="#DiskSpace" text="Disk Space" />
                 <MenuItem mnemonicParsing="false" onAction="#memPie" text="Memory" />
+            <MenuItem mnemonicParsing="false" onAction="#FreeMemOnly" text="Show free mem only" />
             </items>
         </SplitMenuButton>
+      <CheckBox fx:id="DBmem" layoutX="141.0" layoutY="240.0" mnemonicParsing="false" onAction="#readDB" text="Saved memory values" />
+      <ListView fx:id="DBvalues" layoutX="170.0" layoutY="289.0" onMousePressed="#lvClick" prefHeight="200.0" prefWidth="316.0" />
+      <TextField fx:id="CompareInt" layoutX="335.0" layoutY="236.0" />
     </children>
 </AnchorPane>

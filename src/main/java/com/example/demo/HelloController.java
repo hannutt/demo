@@ -20,12 +20,16 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
+import javafx.scene.text.TextFlow;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.controlsfx.control.textfield.TextFields;
 
 import java.io.*;
 import java.lang.management.ManagementFactory;
+import java.lang.management.MemoryPoolMXBean;
+import java.lang.management.MemoryUsage;
+import java.lang.management.RuntimeMXBean;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -52,10 +56,14 @@ public class HelloController {
 
     Network net = new Network();
     Dir dir = new Dir();
+    DeleteFunctions df = new DeleteFunctions();
+
+
 
     OpenFiles openFile = new OpenFiles();
 
-
+    @FXML
+    public TextFlow DBvalues;
     public TextField osField;
     //tuodaan fxml tiedostosta
     @FXML
@@ -686,5 +694,9 @@ public class HelloController {
     public void listEmptyDirs(ActionEvent actionEvent) throws IOException {
         String path = dirInput.getText();
         dir.DoListOfEmptydirs(path,txtBox);
+    }
+
+    public void showLogin(ActionEvent actionEvent) {
+        df.LoginForm();
     }
 }

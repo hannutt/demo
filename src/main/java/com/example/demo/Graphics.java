@@ -4,13 +4,17 @@ import com.sun.management.OperatingSystemMXBean;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.embed.swing.SwingFXUtils;
+import javafx.fxml.FXML;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.chart.PieChart;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.image.WritableImage;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextFlow;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
@@ -18,21 +22,25 @@ import javax.imageio.ImageIO;
 import java.io.File;
 import java.io.IOException;
 import java.lang.management.ManagementFactory;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
+import java.sql.Date;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Arrays;
-import java.util.Calendar;
+import java.util.*;
 
 public class Graphics {
+
+    @FXML
+    public TextFlow DBvalues;
+
+    @FXML
+
 
     public LocalDateTime timenow = LocalDateTime.now();
     public DateTimeFormatter timenowFormatted = DateTimeFormatter.ofPattern("dd.MM.yyyy");
 
 
-    java.sql.Date sqldate = new java.sql.Date(Calendar.getInstance().getTime().getTime());
+    Date sqldate = new Date(Calendar.getInstance().getTime().getTime());
     public String timeStr = timenow.format(timenowFormatted);
 
     public long free;
@@ -181,8 +189,27 @@ public class Graphics {
         pst.setDouble(3,usedSize);
         pst.setDouble(4,totalsize);
 
+
         int rs = pst.executeUpdate();
         System.out.println(rs);
+
+
+
+    }
+
+    public void getMemoryData() throws SQLException {
+        DBconnection conn = new DBconnection();
+        Connection connDB = conn.getConnection();
+        Statement stmt=connDB.createStatement();
+        ResultSet memoryData=stmt.executeQuery("select dateval,free,used,total FROM memoryvalues");
+        Text row = new Text("hello");
+        List<String>values = new ArrayList<>();
+        while(memoryData.next())
+
+            System.out.println("Date: "+memoryData.getString(1)+ " Free "+memoryData.getString(2)+" Used "+memoryData.getString(3)+" Total "+memoryData.getString(4));
+        DBvalues.getChildren().add(row);
+        connDB.close();
+
 
 
 
@@ -191,19 +218,29 @@ public class Graphics {
     public void DoDiskSpacePie() {
         //tietokoneen kovalelyjen haku
         File[] roots2 = File.listRoots();
-        for(int i = 0; i < roots2.length ; i++)
-            System.out.println("Root["+i+"]:" + roots2[i]);
+        for (int i = 0; i < roots2.length; i++)
+            System.out.println("Root[" + i + "]:" + roots2[i]);
+        String firstGuess = String.valueOf(roots2[0]);
+
+
         //setter metodin käyttö,
         setHardDrives(Arrays.toString(roots2));
-        TextInputDialog td = new TextInputDialog();
-        td.setHeaderText("Enter a HD, these hard drives were found "+getHardDrives());
-        td.showAndWait();
-        java.lang.String userPath = td.getEditor().getText();
+        TextInputDialog td = new TextInputDialog(firstGuess);
+        td.setHeaderText("Enter a HD, these hard drives were found " + getHardDrives());
+        String userPath = td.getEditor().getText();
         System.out.println(userPath);
+
+        //selvitetään kumpaa painiketta käyttäjä klikkaa.
+        Optional<String> result = td.showAndWait();
+
+        if (result.get().equals("Cancel")) {
+            td.close();
+        } else {
+
         try {
             File file = new File(userPath);
             long freeSize = file.getFreeSpace() / (1024 * 1024 * 1024);
-            long totalSize = file.getTotalSpace() / (1024*1024*1024);
+            long totalSize = file.getTotalSpace() / (1024 * 1024 * 1024);
             long usedSize = file.getTotalSpace() / (1024 * 1024 * 1024) - file.getFreeSpace() / (1024 * 1024 * 1024);
 
             setFree(freeSize);
@@ -215,12 +252,11 @@ public class Graphics {
             //setter metodilla talletetaan arvot
 
 
-
             ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList(
                     //getfree ja gettotal metodeilla voidaan asettaa arvot piecharttiin
-                    new PieChart.Data("Free GB: "+FreeSizeTxt,getFree()),
-                    new PieChart.Data("Total GB "+TotalSizeTxt,getTotal()),
-                    new PieChart.Data("Used GB "+usedSizeTxt,getUsed())
+                    new PieChart.Data("Free GB: " + FreeSizeTxt, getFree()),
+                    new PieChart.Data("Total GB " + TotalSizeTxt, getTotal()),
+                    new PieChart.Data("Used GB " + usedSizeTxt, getUsed())
             );
             PieChart pieChart = new PieChart(pieChartData);
             Label timeLbl = new Label();
@@ -236,7 +272,7 @@ public class Graphics {
             //voidaan lisätä näkymään uusia komponentteja
             root.getChildren().add(timeLbl);
             root.getChildren().add(saveBtn);
-            Scene scene = new Scene(root,600,400);
+            Scene scene = new Scene(root, 600, 400);
             // getterien avulla voidaan tallentaa kuva tässä metodissa
             // ja tehdä tallennus setterin avulla toisessa metodissa.
             setChartImg(scene);
@@ -245,18 +281,18 @@ public class Graphics {
             stage.show();
             //dynaamisesti luodussa ikkunnassa buttonille asetetaan
             //tapahtumakäsittelijä näin.
-            saveBtn.setOnAction(e->{
+            saveBtn.setOnAction(e -> {
                 try {
                     DoSave(scene);
                 } catch (IOException ex) {
                     throw new RuntimeException(ex);
                 }
             });
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             System.out.println("Unknown hard drive");
 
         }
+    }
 
     }
 

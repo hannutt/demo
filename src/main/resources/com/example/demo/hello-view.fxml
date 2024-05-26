@@ -36,7 +36,7 @@
          </ContextMenu>
       </contextMenu>
    </Label>
-   <MenuBar fx:id="menubar" maxHeight="30.0" maxWidth="627.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="30.0" prefWidth="627.0" style="-fx-background-color: #a1cfbf; -fx-font-size: 14;">
+   <MenuBar fx:id="menubar" maxHeight="30.0" maxWidth="712.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="30.0" prefWidth="712.0" style="-fx-background-color: #a1cfbf; -fx-font-size: 14;">
      <menus>
        <Menu fx:id="open" mnemonicParsing="false" text="Quick open">
          <items>
@@ -74,6 +74,11 @@
                         </image>
                      </ImageView>
                   </graphic></MenuItem>
+           </items>
+         </Menu>
+         <Menu mnemonicParsing="false" text="Misc.">
+           <items>
+             <MenuItem mnemonicParsing="false" onAction="#showLogin" text="DeleteClass" />
            </items>
          </Menu>
      </menus>
