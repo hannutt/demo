@@ -78,8 +78,10 @@ you can also save the pie charts to your device in png format by clicking the sa
 Graphic charts are made with the javafx.scene.chart library.
 On the hard disk option program searches all the hard disks of your device and finally asks you to select the hard disk whose data you want to see in the pie chart.
 The memory and hard disk values ​​can also be saved in the MySQL database with a mouse click.
+
 CUSTOMIZATION
 
 You can make some customizations, such as hide or show part of the interface, reduce or increase font sizes
 change background colors. You can also change the colors of the text in the text area and make the text bold.
 The user interface is in English by default, but you can change the language to Finnish.
+
