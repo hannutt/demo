@@ -1,6 +1,6 @@
 My first Java/JavaFX application. The main idea of ​​this application is to collect hardware and software information
 the device where the program is running and manage the running processes. You can also run cmd, wmic and netsh
-commands using the functions of this application and manage files, applications and file searches.
+commands using the functions of this application and manage files, applications and file searches / file deletions.
 
 MAIN FEATURES:
 
@@ -53,6 +53,13 @@ and the program will search for files with the extension you entered.
 Click and drop feature. you can select this option from the advanced dir menu. 
 The program searches for folders on the C-drive and displays the found folders. 
 Click on one of the results and the program will automatically display the contents of the folder.
+
+Delete feature
+
+in connection with the delete feature, the program uses the JavaFx ListView component.
+So you can delete files with a mouse click. Because deleting files can cause damage, you must log in first. 
+The login information is stored in the mysql database. In the login window, the user has 3 login attempts.
+If all three go wrong, the login button is disabled and the program must be restarted.
 
 
 
