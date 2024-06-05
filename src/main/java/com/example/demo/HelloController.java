@@ -696,7 +696,7 @@ public class HelloController {
         dir.DoListOfEmptydirs(path,txtBox);
     }
 
-    public void showLogin(ActionEvent actionEvent) {
+    public void showLogin(ActionEvent actionEvent) throws IOException {
         df.LoginForm();
     }
 

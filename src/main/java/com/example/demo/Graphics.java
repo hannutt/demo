@@ -9,7 +9,6 @@ import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.chart.PieChart;
 import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.image.WritableImage;
@@ -193,26 +192,20 @@ public class Graphics {
         int rs = pst.executeUpdate();
         System.out.println(rs);
 
-
-
     }
 
-    public void getMemoryData() throws SQLException {
+    public void HdValuesToDb(long freeSize, long usedSize, long totalSize) throws SQLException {
         DBconnection conn = new DBconnection();
         Connection connDB = conn.getConnection();
-        Statement stmt=connDB.createStatement();
-        ResultSet memoryData=stmt.executeQuery("select dateval,free,used,total FROM memoryvalues");
-        Text row = new Text("hello");
-        List<String>values = new ArrayList<>();
-        while(memoryData.next())
+        String DBquery = "INSERT INTO hdvalues (dateval,free,used,total) VALUES (?,?,?,?)";
+        PreparedStatement pst = connDB.prepareStatement(DBquery);
 
-            System.out.println("Date: "+memoryData.getString(1)+ " Free "+memoryData.getString(2)+" Used "+memoryData.getString(3)+" Total "+memoryData.getString(4));
-        DBvalues.getChildren().add(row);
-        connDB.close();
-
-
-
-
+        pst.setDate(1,sqldate);
+        pst.setLong(2,freeSize);
+        pst.setLong(3,usedSize);
+        pst.setLong(4,totalSize);
+        //toteuttaa tallennuksen
+        pst.executeUpdate();
     }
 
     public void DoDiskSpacePie() {
@@ -220,11 +213,13 @@ public class Graphics {
         File[] roots2 = File.listRoots();
         for (int i = 0; i < roots2.length; i++)
             System.out.println("Root[" + i + "]:" + roots2[i]);
+        //lista-arvo str muuttujaan
         String firstGuess = String.valueOf(roots2[0]);
 
 
         //setter metodin käyttö,
         setHardDrives(Arrays.toString(roots2));
+        //dialogin teksti on firstguess muuttujan sisältö.
         TextInputDialog td = new TextInputDialog(firstGuess);
         td.setHeaderText("Enter a HD, these hard drives were found " + getHardDrives());
         String userPath = td.getEditor().getText();
@@ -265,6 +260,18 @@ public class Graphics {
             timeLbl.setLayoutY(95);
             Button saveBtn = new Button();
             saveBtn.setText("Save");
+            Button saveSqlBtn = new Button();
+            saveSqlBtn.setText("Save to SQL");
+            saveSqlBtn.setLayoutX(20);
+            saveSqlBtn.setLayoutY(40);
+            saveSqlBtn.setOnAction(e->{
+                try{
+                    HdValuesToDb(freeSize,usedSize,totalSize);
+                } catch (SQLException ex) {
+                    throw new RuntimeException(ex);
+                }
+
+            });
 
 
             Group root = new Group(pieChart);
@@ -272,6 +279,7 @@ public class Graphics {
             //voidaan lisätä näkymään uusia komponentteja
             root.getChildren().add(timeLbl);
             root.getChildren().add(saveBtn);
+            root.getChildren().add(saveSqlBtn);
             Scene scene = new Scene(root, 600, 400);
             // getterien avulla voidaan tallentaa kuva tässä metodissa
             // ja tehdä tallennus setterin avulla toisessa metodissa.

@@ -21,7 +21,6 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.Objects;
 import java.util.Optional;
 
 public class DeleteFunctions {
@@ -36,14 +35,51 @@ public class DeleteFunctions {
 
     public int loginAttemptsLeft = 3;
 
-    public boolean txtDelete=false;
+    public boolean isAdmin=false;
 
-    public void intitialize() {
+    /*
+    public static boolean isAdmin() {
+        String groups[] = (new com.sun.security.auth.module.NTSystem()).getGroupIDs();
+        for (String group : groups) {
+            if (group.equals("S-1-5-32-544"))
+                return true;
 
+        }
+        return false;
+    }*/
+
+    public boolean returnUserAccount() throws IOException {
+        //tarkistetaan windows käyttäjä
+        Process p = Runtime.getRuntime().exec("whoami");
+        BufferedReader reader = new BufferedReader(new InputStreamReader(p.getInputStream()));
+
+        String line;
+        String result;
+        while ((line = reader.readLine()) != null) {
+            result=line;
+            //jos ehto pitää paikkansa isadmin boolean muuttuu trueksi
+            //isadmin booleania käytetään myöhemmin alempana koodissa
+            if (result.equals("desktop-i10k48a\\omistaja"))
+            {
+                isAdmin=true;
+                System.out.println(line);
+                System.out.println(isAdmin);
+                //isadmin boolean saa arvoksi true, jos ehto pitää paikkansa
+                return true;
+            }
+            else {
+                isAdmin=false;
+                return false;
+            }
+        }
+        reader.close();
+        //tässä on pakko käyttää return komentoa, joten palautetaan boolean, ei tulosta (true/false)
+        return isAdmin;
 
     }
 
-    public void LoginForm() {
+    public void LoginForm() throws IOException {
+        returnUserAccount();
         Stage stage = new Stage();
         VBox vb = new VBox();
         Label titleLbl = new Label();
@@ -52,10 +88,33 @@ public class DeleteFunctions {
         loginAtt.setText("Login attempts: " + loginAttemptsLeft);
         Button loginBtn = new Button();
         loginBtn.setText("Login");
-
+        Button skipLogin = new Button();
+        skipLogin.setText("Skip login");
+        skipLogin.setOpacity(0.0);
         TextField userInput = new TextField();
         TextField pswInput = new TextField();
         loginBtn.setLayoutX(0.0);
+        String userName= System.getProperty("user.name");
+        System.out.println(userName);
+        //jos isadmin on true näytetään kirjautumisen ohituspainike
+        if (isAdmin)
+        {
+            skipLogin.setOpacity(1.0);
+            skipLogin.setOnAction(e->{
+                try {
+
+                    OpenDeleteWindow();
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
+            });
+
+        }
+        //jos isadmin on false, piilotetaan skiplogin button
+       if (!isAdmin)
+       {
+           skipLogin.setOpacity(0.0);
+       }
         loginBtn.setLayoutY(5.0);
         loginBtn.setOnAction(e -> {
             try {
@@ -68,7 +127,7 @@ public class DeleteFunctions {
         });
 
 
-        vb.getChildren().addAll(titleLbl, userInput, pswInput, loginBtn, loginAtt);
+        vb.getChildren().addAll(titleLbl, userInput, pswInput, loginBtn, loginAtt,skipLogin);
 
         Scene scene = new Scene(vb, 200, 200);
         stage.setScene(scene);
@@ -77,6 +136,7 @@ public class DeleteFunctions {
 
     }
 
+    //kirjautumistietojen tarkastus eli haetaan sql login taulusta
     public void checkCredentials(TextField userInput, TextField pswInput, Label loginAtt, Button loginBtn) throws SQLException, IOException {
         DBconnection conn = new DBconnection();
         Connection connDB = conn.getConnection();
@@ -85,13 +145,17 @@ public class DeleteFunctions {
 
 
         while (rs.next())
+            //jos tiedot täsmäävät eli syötenttiin syötetyt tiedon löytyvät login taulusta kutsutaan open
+            //delete metodia, joka avaa uuden ikkunan.
             if (userInput.getText().equals(rs.getString(1)) && pswInput.getText().equals(rs.getString(2))) {
                 OpenDeleteWindow();
             } else {
+                //kirjautumisyrityksiä on 3 jos kirjautuminen menee väärin, vähennetään loginattemps kentästä luku 1
                 loginAttemptsLeft = loginAttemptsLeft - 1;
                 loginAtt.setText(STR."Login attempts: \{loginAttemptsLeft}");
 
             }
+        //jos loginattemptsleft menee nollan, disabloidaan loginbutton
         if (loginAttemptsLeft == 0) {
             loginBtn.setDisable(true);
 
@@ -146,8 +210,9 @@ public class DeleteFunctions {
 
         //replace täytyy tehdä 2 muuttujan avulla, koska muuten ohjelma ei huomio
         //replace komentoa.
-
+        //file merkkijonoon talletaan valitun rivin sisältö.
         String file= fileList.getSelectionModel().getSelectedItems().toString();
+        //huomaa trim metodi lopussa, eli välilyöntien poisto, ilman sitä polku on virheellinen
         String finaFile= STR."\{path}\\\{file.replace("[", "").replace("]", "")}".trim();
         if (!file.isEmpty())
         {
@@ -160,12 +225,14 @@ public class DeleteFunctions {
 
 
     public void DeleteSelFile(String finaFile) throws IOException {
-
+        //vahvistusikkuna
         Alert a = new Alert(Alert.AlertType.CONFIRMATION);
         a.setHeaderText("Delete");
         a.setContentText("You are deleting "+finaFile+" are you sure?");
         Optional<ButtonType> result = a.showAndWait();
+        //jos ok-painiketta painetaan
         if (result.get() == ButtonType.OK) {
+            //luodaan tiedostopolku finalfilen merkkijonosta
             Path p = Paths.get(finaFile);
             Files.delete(p);
             System.out.println(finaFile +" deleted");

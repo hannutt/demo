@@ -11,20 +11,22 @@
 
 <AnchorPane fx:id="graphics" prefHeight="531.0" prefWidth="650.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.demo.HelloApplication">
     <children>
-        <Label fx:id="titleLbl" layoutX="251.0" layoutY="48.0" text="GRAPHICS">
+        <Label fx:id="titleLbl" layoutX="218.0" layoutY="52.0" text="GRAPHICS OPTIONS">
             <font>
                 <Font size="18.0" />
             </font>
         </Label>
-        <SplitMenuButton fx:id="graphicsMenu" layoutX="263.0" layoutY="192.0" mnemonicParsing="false" text="Select">
+        <SplitMenuButton fx:id="graphicsMenu" layoutX="277.0" layoutY="157.0" mnemonicParsing="false" text="Select">
             <items>
                 <MenuItem fx:id="Dspace" mnemonicParsing="false" onAction="#DiskSpace" text="Disk Space" />
                 <MenuItem mnemonicParsing="false" onAction="#memPie" text="Memory" />
             <MenuItem mnemonicParsing="false" onAction="#FreeMemOnly" text="Show free mem only" />
             </items>
         </SplitMenuButton>
-      <CheckBox fx:id="DBmem" layoutX="141.0" layoutY="240.0" mnemonicParsing="false" onAction="#readDB" text="Saved memory values" />
+      <CheckBox fx:id="DBmem" layoutX="162.0" layoutY="257.0" mnemonicParsing="false" onAction="#readDB" text="Saved memory values" />
       <ListView fx:id="DBvalues" layoutX="170.0" layoutY="289.0" onMousePressed="#lvClick" prefHeight="200.0" prefWidth="316.0" />
-      <TextField fx:id="CompareInt" layoutX="335.0" layoutY="236.0" />
+      <TextField fx:id="CompareInt" layoutX="251.0" layoutY="113.0" />
+      <CheckBox fx:id="DSval" layoutX="326.0" layoutY="257.0" mnemonicParsing="false" onAction="#readDiskSpaceDB" text="Saved Disk space values" />
+      <CheckBox fx:id="rmDate" layoutX="328.0" layoutY="218.0" mnemonicParsing="false" onAction="#removeDate" text="Remove date" />
     </children>
 </AnchorPane>

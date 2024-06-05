@@ -49,6 +49,8 @@ public class HelloApplication extends Application {
     public  long total=0;
 
     @FXML
+    public CheckBox DSval,DBmem,rmDate;
+    @FXML
     public ListView DBvalues;
 
     public TextField CompareInt;
@@ -167,31 +169,42 @@ public class HelloApplication extends Application {
     }
 
 
+
     public void readDB(ActionEvent actionEvent) {
-        try {
-            DBconnection conn = new DBconnection();
-            Connection connDB = conn.getConnection();
-            Statement stmt=connDB.createStatement();
-            ResultSet memoryData=stmt.executeQuery("select dateval,free,used,total FROM memoryvalues");
+        if (DBmem.isSelected())
+        {
+            try {
+
+                DBconnection conn = new DBconnection();
+                Connection connDB = conn.getConnection();
+                Statement stmt=connDB.createStatement();
+                ResultSet memoryData=stmt.executeQuery("select dateval,free,used,total FROM memoryvalues");
 
 
-            while(memoryData.next())
-                DBvalues.getItems().add(memoryData.getString(1)+" "+memoryData.getString(2)+" "+memoryData.getString(3) +" "+memoryData.getString(4));
+                while(memoryData.next())
+                    DBvalues.getItems().add(memoryData.getString(1)+" "+memoryData.getString(2)+" "+memoryData.getString(3) +" "+memoryData.getString(4));
                 //row.setText("Date: "+memoryData.getString(1)+ " Free "+memoryData.getString(2)+" Used "+memoryData.getString(3)+" Total "+memoryData.getString(4));
-            connDB.close();
+                connDB.close();
 
 
-        }catch (SQLException e) {
-            System.out.println(e);
+            }catch (SQLException e) {
+                System.out.println(e);
 
+
+            }
+
+        }
+        else {
+            DBvalues.getItems().clear();
         }
 
     }
 
+    //listviewin rivin saa valittua klikkaamalla sitä.
     public void lvClick(MouseEvent mouseEvent) {
-
         CompareInt.setText(DBvalues.getSelectionModel().getSelectedItems().toString());
         System.out.println(DBvalues.getSelectionModel().getSelectedItems());
+
     }
 
     public void FreeMemOnly(ActionEvent actionEvent) {
@@ -201,8 +214,9 @@ public class HelloApplication extends Application {
             Statement stmt=connDB.createStatement();
             ResultSet memoryData=stmt.executeQuery("select free FROM memoryvalues");
 
-
+            //LÄPIKÄYNTI silmukassa
             while(memoryData.next())
+                //tietojen lisäys listviewiin (dbvalues)
                 DBvalues.getItems().add(memoryData.getString(1));
             //row.setText("Date: "+memoryData.getString(1)+ " Free "+memoryData.getString(2)+" Used "+memoryData.getString(3)+" Total "+memoryData.getString(4));
             connDB.close();
@@ -214,4 +228,65 @@ public class HelloApplication extends Application {
         }
 
     }
-}
+
+    public void readDiskSpaceDB(ActionEvent actionEvent) {
+        //jos checboksi on valittu näytetään tietokannan arvot
+        //muuten tyhjennetään listview
+        if (DSval.isSelected())
+        {
+            try {
+
+                DBconnection conn = new DBconnection();
+                Connection connDB = conn.getConnection();
+                Statement stmt=connDB.createStatement();
+                ResultSet memoryData=stmt.executeQuery("select dateval, free,used,total FROM hdvalues");
+
+
+                while(memoryData.next())
+                    DBvalues.getItems().add(memoryData.getString(1)+" "+memoryData.getString(2)+" "+memoryData.getString(3) +" "+memoryData.getString(4));
+                //row.setText("Date: "+memoryData.getString(1)+ " Free "+memoryData.getString(2)+" Used "+memoryData.getString(3)+" Total "+memoryData.getString(4));
+                connDB.close();
+
+
+            }catch (SQLException e) {
+                System.out.println(e);
+
+            }
+
+
+        }
+        else {
+            DBvalues.getItems().clear();
+        }
+
+    }
+
+    public void removeDate(ActionEvent actionEvent) {
+        //jos nämä checkboxit on valittu, poistetaan päivämäärät listviewsta.
+        if (DSval.isSelected() && rmDate.isSelected())
+        {
+           DBvalues.getItems().clear();
+            try {
+
+                DBconnection conn = new DBconnection();
+                Connection connDB = conn.getConnection();
+                Statement stmt=connDB.createStatement();
+                ResultSet memoryData=stmt.executeQuery("select free,used,total FROM hdvalues");
+
+
+                while(memoryData.next())
+                    DBvalues.getItems().add(memoryData.getString(1)+" "+memoryData.getString(2)+" "+memoryData.getString(3));
+                //row.setText("Date: "+memoryData.getString(1)+ " Free "+memoryData.getString(2)+" Used "+memoryData.getString(3)+" Total "+memoryData.getString(4));
+                connDB.close();
+
+
+            }catch (SQLException e) {
+                System.out.println(e);
+
+            }
+
+        }
+
+
+        }
+    }

@@ -14,12 +14,19 @@ Graphical user interface made with Gluon's Scene Builder. UI contains a dropdown
 Options are:
 
 These are executed when you select them:
+
 OS -> shows information about your operating system.
+
 Memory -> shows information about your device's RAM memory.
+
 Processor -> shows information about your device's processor.
+
 Java -> shows your Java version and installation directory.
+
 File system -> shows the total status of the hard disk and the free space.
+
 Registry -> access to the Windows registry.
+
 WLAN report -> Create a new wlan report  (netsh wlan show wlanreport -command) or open the latest report in a web browser
 
 
@@ -62,6 +69,14 @@ The login information is stored in the mysql database. In the login window, the 
 If all three go wrong, the login button is disabled and the program must be restarted.
 
 
+Delete feature can also use without log in if CMD command whoami return right value.
+in this case it works only with my own windows account name. this feature is maded with 
+public boolean wich run  whoami command using Runtime,Process and BufferReader classes.
+
+
+
+
+
 
 QUICK OPENER
 
@@ -85,6 +100,8 @@ you can also save the pie charts to your device in png format by clicking the sa
 Graphic charts are made with the javafx.scene.chart library.
 On the hard disk option program searches all the hard disks of your device and finally asks you to select the hard disk whose data you want to see in the pie chart.
 The memory and hard disk values ​​can also be saved in the MySQL database with a mouse click.
+with checkboxes, you get information from the database to the program's listView component. 
+You can also filter data, for example remove the recording date from the results.
 
 CUSTOMIZATION
 

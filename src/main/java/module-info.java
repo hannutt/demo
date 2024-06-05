@@ -16,6 +16,7 @@ module com.example.demo {
     requires org.apache.commons.io;
     requires java.sql;
     requires mysql.connector.j;
+    requires jdk.security.auth;
 
     opens com.example.demo to javafx.fxml;
     exports com.example.demo;
