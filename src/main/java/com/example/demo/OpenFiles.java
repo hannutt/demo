@@ -45,45 +45,41 @@ public class OpenFiles {
             //kutsutaan metodia, joka asettaa ja näyttää dialogi-ikkunnassa tekstitiedoston
             //avaamiseen sopivia vaihtoehtoja
             SetTextList();
+            Runtime.getRuntime().exec("cmd.exe /c Start " +userChoice +".exe " + fileName);
             //jos metodissa userchoice kenttään on tallennettu (eli valittu) wordpad
-            if (Objects.equals(userChoice, "Wordpad"))
-            {  //avataan wordpad ja näytetään siinä valitun tiedoston sisältö.
-                Runtime.getRuntime().exec("cmd.exe /c Start wordpad.exe " + fileName);
-
-            }
-            else if (Objects.equals(userChoice, "Notepad"))
-            {
-                Runtime.getRuntime().exec("cmd.exe /c Start notepad.exe " + fileName);
-
-            }
 
 
         }
         else if (Objects.equals(fileType, "image/jpeg"))
         {
             SetImgList();
+            Runtime.getRuntime().exec("cmd.exe /c Start "+userChoice +".exe "+ fileName);
 
-            if (Objects.equals(userChoice, "Paint"))
-            {
-                Runtime.getRuntime().exec("cmd.exe /c Start mspaint.exe " + fileName);
 
-            }
 
         }
         else if (Objects.equals(fileType,"audio/mpeg"))
         {
             SetAudioList();
-            if (Objects.equals(userChoice, "Media Player"))
-            {
-                Runtime.getRuntime().exec("cmd.exe /c Start wmplayer.exe " + fileName);
 
-            }
+            Runtime.getRuntime().exec("cmd.exe /c Start " +userChoice+".exe " + fileName);
+
+
         }
+        else if (Objects.equals(fileType,"application/pdf"))
+        {
+            SetPDFList();
+
+            Runtime.getRuntime().exec("cmd.exe /c Start "+userChoice +".exe "+ fileName);
+
+
+        }
+
 
     }
 
     public void SetTextList() {
-        String[] txt={"Notepad","Wordpad"};
+        String[] txt={"notepad","wordpad"};
         //dialogin vaihtoehdoiksi asetetaan txt-listan sisältö
         ChoiceDialog<String> d = new ChoiceDialog<>(txt[0],txt[1],"Cancel");
         d.showAndWait();
@@ -92,7 +88,7 @@ public class OpenFiles {
     }
 
     public void SetImgList() {
-        String[] img={"Paint"};
+        String[] img={"mspaint"};
         ChoiceDialog<String> d = new ChoiceDialog<>(img[0],"Cancel");
         d.showAndWait();
         //String choice = d.getSelectedItem();
@@ -101,11 +97,20 @@ public class OpenFiles {
     }
 
     public void SetAudioList() {
-        String[] audio={"Media Player"};
+        String[] audio={"wmplayer"};
         ChoiceDialog<String> d = new ChoiceDialog<>(audio[0],"Cancel");
         d.showAndWait();
         //String choice = d.getSelectedItem();
         userChoice = d.getSelectedItem();
+    }
+
+    public void SetPDFList() {
+        String[] browsers={"msedge","Firefox","Google"};
+        ChoiceDialog<String> d = new ChoiceDialog<>(browsers[0],browsers[1],browsers[2],"Cancel");
+        d.showAndWait();
+        //String choice = d.getSelectedItem();
+        userChoice = d.getSelectedItem();
+
     }
 
 

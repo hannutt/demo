@@ -286,6 +286,29 @@ public class HelloApplication extends Application {
             }
 
         }
+        else if (DBmem.isSelected() && rmDate.isSelected())
+        {
+            DBvalues.getItems().clear();
+            try {
+
+                DBconnection conn = new DBconnection();
+                Connection connDB = conn.getConnection();
+                Statement stmt=connDB.createStatement();
+                ResultSet memoryData=stmt.executeQuery("select free,used,total FROM memoryvalues");
+
+
+                while(memoryData.next())
+                    DBvalues.getItems().add(memoryData.getString(1)+" "+memoryData.getString(2)+" "+memoryData.getString(3));
+                //row.setText("Date: "+memoryData.getString(1)+ " Free "+memoryData.getString(2)+" Used "+memoryData.getString(3)+" Total "+memoryData.getString(4));
+                connDB.close();
+
+
+            }catch (SQLException e) {
+                System.out.println(e);
+
+            }
+
+        }
 
 
         }
