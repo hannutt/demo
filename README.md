@@ -1,3 +1,5 @@
+Project keywords: JavaFX, CMD- ,Netsh- & WMIC-comands, MySQL, File Manager, Process Manager.
+
 My first Java/JavaFX application. The main idea of ​​this application is to collect hardware and software information
 the device where the program is running and manage the running processes. You can also run cmd, wmic and netsh
 commands using the functions of this application and manage files, applications and file searches / file deletions.
@@ -29,10 +31,10 @@ Registry -> access to the Windows registry.
 
 WLAN report -> Create a new wlan report  (netsh wlan show wlanreport -command) or open the latest report in a web browser
 
+Printers -> displays a list of available printers.
 
 Running applications-> shows running applications and their process ID.
 The process IDs can be found on the tabs of the menu button, which you can click to close the application.
-
 
 Network -> shows your IP address, available wlan networks, hostname and checks your Internet connection status by pinging an external web page.
 the network feature also has a hidden text field and button that appear when the feature is selected.
@@ -40,7 +42,7 @@ You can ping any web page and the program will tell you if the page is available
 If the ping is ok, the program will show the WebView check box. By clicking on it, you will
 see the webpage you are looking for in javaFX webView.
 
-After selecting a wlan network, you can also run the "netsh wlan show profile name=" command, which will display. 
+After selecting a wlan network, you can also run the "netsh wlan show profile name=?" command, which will display. 
 more detailed information about the selected wlan network in the program's text area.
 
 DIR FEATURE
@@ -61,22 +63,22 @@ Click and drop feature. you can select this option from the advanced dir menu.
 The program searches for folders on the C-drive and displays the found folders. 
 Click on one of the results and the program will automatically display the contents of the folder.
 
-Delete feature
+DELETE FEATURE
 
 in connection with the delete feature, the program uses the JavaFx ListView component.
 So you can delete files with a mouse click. Because deleting files can cause damage, you must log in first. 
 The login information is stored in the mysql database. In the login window, the user has 3 login attempts.
 If all three go wrong, the login button is disabled and the program must be restarted.
 
-
 Delete feature can also use without log in if CMD command whoami return right value.
 in this case it works only with my own windows account name. this feature is maded with 
 public boolean wich run  whoami command using Runtime,Process and BufferReader classes.
 
-
-
-
-
+In the Delete window, you can select an item from the drop-down menu that shows all the 
+directories on the C drive. you can click to select a folder and it will go to the input 
+field and click the dir button and the folder files will be listed in the list view component.
+(this feature is maded with Files.walk method and event handlers )
+you can also enter the name of the hard drive and the folder directly in the input field.
 
 QUICK OPENER
 
@@ -106,6 +108,6 @@ You can also filter data, for example remove the recording date from the results
 CUSTOMIZATION
 
 You can make some customizations, such as hide or show part of the interface, reduce or increase font sizes
-change background colors. You can also change the colors of the text in the text area and make the text bold.
+change background colors. You can also change the colors of the text in the text area and make the text bold or italic.
 The user interface is in English by default, but you can change the language to Finnish.
 

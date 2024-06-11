@@ -15,6 +15,7 @@ public class OpenFiles {
     public TextArea txtBox;
     public String txtContent;
 
+    //tähän tallennetaan käyttäjän dialogista valitseman ohjelman nimi.
     String userChoice;
 
     public String setTxtContent(String con)
@@ -45,6 +46,8 @@ public class OpenFiles {
             //kutsutaan metodia, joka asettaa ja näyttää dialogi-ikkunnassa tekstitiedoston
             //avaamiseen sopivia vaihtoehtoja
             SetTextList();
+            //suoritetaan cmd komento, userchoiceen on taletettu valitun ohjelman nimi. lisätään
+            //loppuun .exe pääte niin ohjelma voidaan avata.
             Runtime.getRuntime().exec("cmd.exe /c Start " +userChoice +".exe " + fileName);
             //jos metodissa userchoice kenttään on tallennettu (eli valittu) wordpad
 
@@ -97,15 +100,15 @@ public class OpenFiles {
     }
 
     public void SetAudioList() {
-        String[] audio={"wmplayer"};
-        ChoiceDialog<String> d = new ChoiceDialog<>(audio[0],"Cancel");
+        String[] audio={"wmplayer","vlc"};
+        ChoiceDialog<String> d = new ChoiceDialog<>(audio[0],audio[1],"Cancel");
         d.showAndWait();
         //String choice = d.getSelectedItem();
         userChoice = d.getSelectedItem();
     }
 
     public void SetPDFList() {
-        String[] browsers={"msedge","Firefox","Google"};
+        String[] browsers={"msedge","Firefox","Chrome"};
         ChoiceDialog<String> d = new ChoiceDialog<>(browsers[0],browsers[1],browsers[2],"Cancel");
         d.showAndWait();
         //String choice = d.getSelectedItem();

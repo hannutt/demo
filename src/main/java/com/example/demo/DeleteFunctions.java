@@ -1,6 +1,7 @@
 package com.example.demo;
 
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -21,9 +22,14 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 public class DeleteFunctions {
+
+    @FXML
+    public MenuButton directories;
     @FXML
     public TextField userDirInput;
 
@@ -37,16 +43,6 @@ public class DeleteFunctions {
 
     public boolean isAdmin=false;
 
-    /*
-    public static boolean isAdmin() {
-        String groups[] = (new com.sun.security.auth.module.NTSystem()).getGroupIDs();
-        for (String group : groups) {
-            if (group.equals("S-1-5-32-544"))
-                return true;
-
-        }
-        return false;
-    }*/
 
     public boolean returnUserAccount() throws IOException {
         //tarkistetaan windows käyttäjä
@@ -92,7 +88,8 @@ public class DeleteFunctions {
         skipLogin.setText("Skip login");
         skipLogin.setOpacity(0.0);
         TextField userInput = new TextField();
-        TextField pswInput = new TextField();
+        PasswordField pswInput = new PasswordField();
+
         loginBtn.setLayoutX(0.0);
         String userName= System.getProperty("user.name");
         System.out.println(userName);
@@ -134,7 +131,9 @@ public class DeleteFunctions {
         stage.show();
 
 
+
     }
+
 
     //kirjautumistietojen tarkastus eli haetaan sql login taulusta
     public void checkCredentials(TextField userInput, TextField pswInput, Label loginAtt, Button loginBtn) throws SQLException, IOException {
@@ -242,6 +241,41 @@ public class DeleteFunctions {
 
 
 
+
+
+
+
+    }
+
+
+    //c:\ aseman kansioiden listaus ja niiden vienti menubuttonin välilehtiin
+    public void dirC(ActionEvent actionEvent) throws IOException {
+        Path dir = Paths.get("c:\\");
+        String dirStr = String.valueOf(dir);
+        //maxdepthin avulla määritetäänt kuinka monta alikansiota näytetään haussa, 1=ensimmäiset kansiot
+        List<String> dirs=new ArrayList<>();
+        Files.walk(dir, 1)
+                .filter(p -> Files.isDirectory(p) && ! p.equals(dir))
+                .forEach(p -> dirs.add(String.valueOf(p.getFileName())));
+        int listSize = dirs.size();
+        for (int i =0;i<listSize;i++) {
+            //luodaan yhtä monta menuitemiä kuin kansioita on listassa
+            MenuItem mi = new MenuItem();
+            mi.setText("C:\\"+dirs.get(i));
+            directories.getItems().add(mi);
+            //luodaan tapahtumankäsittelijä for-silmukan sisässä, muuten handle metodi ei tunnista
+            //mi-menuitemia
+            EventHandler<ActionEvent> PathClick = new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent actionEvent) {
+                    String p =mi.getText();
+                    userDirInput.setText(p);
+
+                }
+            };
+            //lisätään tapahtumankäsittelinä menuitem komponenttiin.
+            mi.setOnAction(PathClick);
+        }
 
 
 

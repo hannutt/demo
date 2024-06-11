@@ -3,6 +3,8 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.MenuButton?>
+<?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
@@ -17,5 +19,10 @@
       <ListView fx:id="fileList" layoutX="163.0" layoutY="152.0" onMousePressed="#filesListClick" prefHeight="200.0" prefWidth="290.0" />
       <TextField fx:id="userDirInput" layoutX="163.0" layoutY="95.0" />
       <Button fx:id="bareDirBtn" layoutX="358.0" layoutY="95.0" mnemonicParsing="false" onAction="#showFilesFromFolder" text="Dir" />
+      <MenuButton fx:id="directories" layoutX="81.0" layoutY="53.0" mnemonicParsing="false" text="C:\">
+        <items>
+          <MenuItem mnemonicParsing="false" onAction="#dirC" text="Click to list c:\" />
+        </items>
+      </MenuButton>
    </children>
 </AnchorPane>

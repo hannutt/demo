@@ -100,7 +100,7 @@ public class HelloController {
 
 
     @FXML
-    public MenuButton pids;
+    public MenuButton pids,directories;
     @FXML
     public Button noteBtn,fin;
 
@@ -209,6 +209,7 @@ public class HelloController {
 
 
     }
+    //tarkistetaan palomuurin tila on/off
     public void firewStatus() throws IOException {
         Process status = Runtime.getRuntime().exec("netsh advfirewall show currentprofile");
         status.getOutputStream().close();
@@ -216,9 +217,11 @@ public class HelloController {
         String line;
         line = fwstatus.readLine();
 
+
+
         while ((line = fwstatus.readLine()) != null) {
             System.out.println(line);
-            if (line.contains("Ok."))
+            if (line.contains("ON"))
             {
                 setFwstatus();
 
@@ -701,4 +704,20 @@ public class HelloController {
     }
 
 
+    public void showPrinters(ActionEvent actionEvent) throws IOException {
+        Process p = Runtime.getRuntime().exec("wmic printer list brief");
+        BufferedReader r = new BufferedReader(new InputStreamReader(p.getInputStream()));
+        String line;
+        line = r.readLine();
+
+        while ((line = r.readLine()) != null) {
+            txtBox.appendText(line.trim()+"\n");
+
+        }
+
+    }
+
+    public void cursiveFont(ActionEvent actionEvent) {
+        c.DoCursive(txtBox);
+    }
 }

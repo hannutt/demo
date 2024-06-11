@@ -6,6 +6,7 @@ import javafx.scene.control.MenuButton;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
+import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 import javafx.scene.control.Button;
@@ -87,9 +88,18 @@ public class Customization {
     }
 
     public void DoBolding(javafx.scene.control.TextArea txtBox) {
+        //haetaan käytössä olevan fontin tiedot
         Font currentFont = Font.font((Font.font(txtBox.getFont().getSize())).getStyle());
        // currentfontin ansioista fontti ja koko oysyvät samana, ainoastaan fontweight vaihtuu
         txtBox.setFont(Font.font(String.valueOf(currentFont), FontWeight.BOLD, currentFont.getSize()));
+
+    }
+
+    //fontin kursivointi
+    public void DoCursive(javafx.scene.control.TextArea txtBox) {
+
+        Font currentFont = Font.font((Font.font(txtBox.getFont().getSize())).getStyle());
+        txtBox.setFont(Font.font(String.valueOf(currentFont), FontPosture.ITALIC, currentFont.getSize()));
 
     }
 

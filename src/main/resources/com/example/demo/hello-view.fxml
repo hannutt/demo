@@ -62,6 +62,7 @@
                <MenuItem mnemonicParsing="false" onAction="#colChoose" text="Change text color" />
                <MenuItem mnemonicParsing="false" onAction="#changeBlue" text="BG col Blue" />
                <MenuItem mnemonicParsing="false" onAction="#BoldText" text="Bold text" />
+               <MenuItem fx:id="cursiveFont" mnemonicParsing="false" onAction="#cursiveFont" text="Cursive font" />
            </items>
          </Menu>
          <Menu mnemonicParsing="false" text="Language op.">
@@ -78,7 +79,7 @@
          </Menu>
          <Menu mnemonicParsing="false" text="Misc.">
            <items>
-             <MenuItem mnemonicParsing="false" onAction="#showLogin" text="DeleteClass" />
+             <MenuItem mnemonicParsing="false" onAction="#showLogin" text="Delete files" />
            </items>
          </Menu>
      </menus>
@@ -118,6 +119,7 @@
                <MenuItem fx:id="network" mnemonicParsing="false" onAction="#NetWork" text="Network" />
                <MenuItem fx:id="registry" mnemonicParsing="false" onAction="#winReg" text="Registry" />
                <MenuItem mnemonicParsing="false" onAction="#wlanReport" text="WLAN report" />
+               <MenuItem mnemonicParsing="false" onAction="#showPrinters" text="Printers" />
               </items>
           </MenuButton>
           <Button fx:id="graphBtn" mnemonicParsing="false" onAction="#openGraph" text="Graphics" GridPane.columnIndex="2" GridPane.halignment="RIGHT" />
