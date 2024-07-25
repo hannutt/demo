@@ -1,8 +1,10 @@
-Project keywords: JavaFX, CMD- ,Netsh- & WMIC-comands, MySQL, File Manager, Process Manager.
+Project keywords: JavaFX, CMD- ,Netsh- & WMIC-commands, MySQL, File Manager, Process Manager.
 
 My first Java/JavaFX application. The main idea of ​​this application is to collect hardware and software information
 the device where the program is running and manage the running processes. You can also run cmd, wmic and netsh
 commands using the functions of this application and manage files, applications and file searches / file deletions.
+
+![sysinfo.png](src%2Fmain%2Fresources%2Fimg%2Fsysinfo.png)
 
 MAIN FEATURES:
 
@@ -89,7 +91,7 @@ You can also open the desired program or file. These features are made with Java
 The program recognizes the file type and offers a few different options from which you can choose what you want to
 open the file with.
 
-So far, the program recognizes text, audio and image files and offers a few options from common Windows programs to
+So far, the program recognizes text, audio, PDF and image files and offers a few options from common Windows programs to
 open them.
 
 For example, when opening a text file, the program offers Wordpad and Notepad applications in a dialog box 
@@ -100,6 +102,7 @@ GRAPHICS
 With the Graphics option, you can draw graphical pie charts of your ram memory and hard disk space.
 you can also save the pie charts to your device in png format by clicking the save button.
 Graphic charts are made with the javafx.scene.chart library.
+
 On the hard disk option program searches all the hard disks of your device and finally asks you to select the hard disk whose data you want to see in the pie chart.
 The memory and hard disk values ​​can also be saved in the MySQL database with a mouse click.
 with checkboxes, you get information from the database to the program's listView component. 
